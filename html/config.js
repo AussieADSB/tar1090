@@ -6,7 +6,7 @@
 "use strict";
 // -- Title Settings --------------------------------------
 // Show number of aircraft and/or messages per second in the page title
-//PlaneCountInTitle = false;
+PlaneCountInTitle = true;
 //MessageRateInTitle = false;
 
 // -- Output Settings -------------------------------------
@@ -22,10 +22,10 @@
 // degrees.
 
 // Default center of the map.
-//DefaultCenterLat = 45.0;
-//DefaultCenterLon = 9.0;
+DefaultCenterLat = -26.3;
+DefaultCenterLon = 132.3;
 // The google maps zoom level, 0 - 16, lower is further out
-//DefaultZoomLvl   = 7;
+DefaultZoomLvl   = 5;
 
 // specify lat lon that the 'auto-select plane' feature will choose the closest plane to
 // autoselectCoords = [42, 21];
@@ -60,7 +60,7 @@
 // actual_range_show = true;
 
 // which map is displayed to new visitors
-// MapType_tar1090 = "carto_light_all";
+MapType_tar1090 = "carto_light_all";
 //
 // valid values for the above setting:
 // osm
@@ -199,7 +199,7 @@ ColorByAlt = {
 // Range rings
 
 // Also called range rings :)
-//SiteCircles = true; // true to show circles (only shown if the center marker is shown)
+SiteCircles = false; // true to show circles (only shown if the center marker is shown)
 // In miles, nautical miles, or km (depending settings value 'DisplayUnits')
 //SiteCirclesDistances = new Array(100,150,200,250);
 // When more circles defined than cirle colors last color will be used or black by default
@@ -208,7 +208,7 @@ ColorByAlt = {
 //SiteCirclesLineDash = [5, 5]; // null - solid line, [5, 5] - dashed line with 5 pixel lines and spaces in between
 
 // Controls page title, righthand pane when nothing is selected
-//PageName = "tar1090";
+PageName = "AussieADSB";
 
 // Show country flags by ICAO addresses?
 //ShowFlags = true;
@@ -245,9 +245,9 @@ MapboxAPIKey = null;
 
 // Only display labels when zoomed in this far:
 //labelZoom = 8;
-//labelZoomGround = 12.5;
+labelZoomGround = 12.5;
 
-//labelFont = 'bold 12px tahoma';
+labelFont = 'bold 10px tahoma';
 
 //displayUATasADSB = false;
 //uatNoTISB = true;
@@ -275,12 +275,12 @@ MapboxAPIKey = null;
 
 // Filter implausible positions (required speed > Mach 3.5)
 // valid values: true, false, "onlyMLAT" ("" required)
-// positionFilter = true;
-// positionFilterSpeed = 3.5; // in Mach
+positionFilter = true;
+positionFilterSpeed = 3.5; // in Mach
 // filter speed is based on transmitted ground speed if available
 // this factor is used to give the actual filter speed
 // positionFilterGsFactor = 1.8;
-// debugPosFilter = false; // draw red dots for filtered positions
+debugPosFilter = false; // draw red dots for filtered positions
 
 // altitudeFilter = true;
 
@@ -297,31 +297,31 @@ MapboxAPIKey = null;
 //squareMania = false;
 
 // Columns that have a // in front of them are shown.
-/* // remove this line to mofify columns (and the one at the end)
+// remove this line to mofify columns (and the one at the end)
 HideCols = [
-	"#icao",
+//	"#icao",
 //	"#country",
 //	"#flight",
-//	"#route",
-	"#registration",
+    "#route",
+//	"#registration",
 //	"#type",
-//	"#squawk",
+    "#squawk",
 //	"#altitude",
-//	"#speed",
-	"#vert_rate",
-//	"#sitedist",
-	"#track",
-	"#msgs",
-	"#seen",
-//	"#rssi",
-	"#lat",
-	"#lon",
-	"#data_source",
-	"#military",
+    "#speed",
+    "#vert_rate",
+    "#sitedist",
+    "#track",
+    "#msgs",
+    "#seen",
+    "#rssi",
+    "#lat",
+    "#lon",
+    "#data_source",
+    "#military",
     "#wd",
     "#ws",
 ]
-*/ // remove this line to modify columns (and the one at the start)
+// remove this line to modify columns (and the one at the start)
 
 // show aircraft pictures
 // showPictures = true;
@@ -338,7 +338,7 @@ HideCols = [
 // show a link to jetphotos, only works if planespottersAPI is disabled
 // jetphotoLinks = false;
 
-// showSil = false;
+showSil = true;
 // this shows small pictures in the details but they need to be provided by the user in the folder /usr/local/share/tar1090/aircraft_sil
 // showPictures needs to be enabled as well
 // to only get these pictures disable the planespottersAPI
