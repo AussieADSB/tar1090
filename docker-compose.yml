@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  tar1090:
+    container_name: tar1090
+    image: tar1090
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - ./:/usr/local/share/tar1090
+      - ./mock-run-readsb:/run/readsb
+    ports:
+      - "8003:8003"
