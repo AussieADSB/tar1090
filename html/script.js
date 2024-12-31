@@ -1747,9 +1747,9 @@ function initSourceFilter(colors) {
     let html = '';
     html += createFilter(colors['adsb'], 'ADS-B', sources[0]);
 
-    html += createFilter(colors['uat'], 'UAT / ADS-R', sources[1][0]);
+    // html += createFilter(colors['uat'], 'UAT / ADS-R', sources[1][0]);
     html += createFilter(colors['mlat'], 'MLAT', sources[2]);
-    html += createFilter(colors['tisb'], 'TIS-B', sources[3]);
+    // html += createFilter(colors['tisb'], 'TIS-B', sources[3]);
     html += createFilter(colors['modeS'], 'Mode-S', sources[4]);
     html += createFilter(colors['other'], 'Other', sources[5]);
     html += createFilter(colors['uat'], 'ADS-C', sources[6]);
@@ -1785,9 +1785,9 @@ function initFlagFilter(colors) {
 
     let html = '';
     html += createFilter(colors['tisb'], 'Military', flagFilterValues[0]);
-    //html += createFilter(colors['mlat'], 'Interesting');
-    html += createFilter(colors['uat'], 'PIA', flagFilterValues[1]);
-    html += createFilter(colors['adsb'], 'LADD', flagFilterValues[2]);
+    // html += createFilter(colors['mlat'], 'Interesting');
+    // html += createFilter(colors['uat'], 'PIA', flagFilterValues[1]);
+    // html += createFilter(colors['adsb'], 'LADD', flagFilterValues[2]);
 
     document.getElementById('flagFilter').innerHTML = html;
 
