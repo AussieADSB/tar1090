@@ -50,21 +50,6 @@ select {
     z-index: 1;
     background-color: var(--BGCOLOR1);
 }
-.aggregator-selected-bg:before {
-    content: ' ';
-    position:absolute;
-    display:block;
-    left:0;
-    top:0;
-    width:100%;
-    height:100%;
-    background-size: calc( 148 * var(--SCALE)) calc( 148 * var(--SCALE));
-    background-repeat: no-repeat;
-    background-position: calc( 7px * var(--SCALE)) calc( 108px * var(--SCALE));
-    background-image: url("images/aggregator-logo.png");
-    z-index:2;
-    opacity: 0.12;
-}
 #infoblock-container {
     position:relative;
     overflow: auto;
@@ -374,7 +359,7 @@ select.error, textarea.error, input.error {
 }
 .layer-switcher.shown .panel {
     overflow-y: auto;
-    height: 95vh;
+    max-height: 95vh;
 }
 
 /* new css */

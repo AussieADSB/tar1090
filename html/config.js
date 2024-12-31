@@ -356,7 +356,7 @@ showSil = true;
 // wideInfoBlock = false;
 // baseInfoBlockWidth = 200;
 
-//enableDWD = true;
+enableDWD = false;
 
 // Display only the last leg of a flight in globeIndex mode.
 //lastLeg = true;
