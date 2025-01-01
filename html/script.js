@@ -3168,16 +3168,18 @@ function refreshPageTitle() {
 
 function displaySil() {
     jQuery('#copyrightInfo').html("");
-    if (!showSil) {
+
+    let selected = SelectedPlane;
+
+    if (!showSil || !selected.icaoType) {
         setPhotoHtml("");
         return;
     }
-    let selected = SelectedPlane;
-    let new_html="";
-    let type = selected.icaoType ? selected.icaoType : 'ZZZZ';
-    let hex = selected.icao.toUpperCase();
-    new_html = "<img id='silhouette' width='"+ 151 * globalScale + "' src='aircraft_sil/" + type + ".png' />";
+
+    let new_html = "<img id='silhouette' width='" + 151 * globalScale + "' src='aircraft_sil/" + selected.icaoType + ".png' />";
+
     setPhotoHtml(new_html);
+
     selected.icao.toUpperCase();
 }
 

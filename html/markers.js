@@ -1041,15 +1041,21 @@ let TypeDesignatorIcons = {
     'MI24': ['mil24', 1.00],
     'AS65': ['dauphin', 0.85],
     'S76': ['dauphin', 0.86],
+
+    'R22': ['helicopter', 0.92],
+    'R44': ['helicopter', 0.94],
+    'R66': ['helicopter', 0.98],
+
+    // 3 bladed
     'GAZL': ['gazelle', 1.00],
     'AS50': ['gazelle', 1.00],
     'AS55': ['gazelle', 1.00],
     'ALO2': ['gazelle', 1.00],
     'ALO3': ['gazelle', 1.00],
-
-    'R22': ['helicopter', 0.92],
-    'R44': ['helicopter', 0.94],
-    'R66': ['helicopter', 0.98],
+    'EC20': ['gazelle', 1.00],
+    'EC30': ['gazelle', 1.00],
+    'G2CA': ['gazelle', 0.92],
+    'H269 ': ['gazelle', 0.86],
 
     // 5 bladed
     'EC55': ['s61', 0.94], // 5t
@@ -1065,6 +1071,7 @@ let TypeDesignatorIcons = {
     'EH10': ['s61', 1.04], // 14.5t (AW101)
     'H53': ['s61', 1.1], // 19t
     'H53S': ['s61', 1.1], // 19t
+    'H500': ['s61', 0.96],
 
     'U2': ['u2', 1],
     'C2': ['c2', 1],
