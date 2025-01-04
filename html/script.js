@@ -84,7 +84,7 @@ let firstFetch = true;
 let debugCounter = 0;
 let pathName = window.location.pathname.replace(/\/+/, '/') || "/";
 let sourcesFilter = null;
-let sources = ['adsb', ['uat', 'adsr'], 'mlat', 'tisb', 'modeS', 'other', 'adsc', 'ais'];
+let sources = ['adsb', 'mlat', 'modeS', 'other', 'adsc', 'ais'];
 let flagFilter = null;
 let flagFilterValues = ['military', 'pia', 'ladd'];
 let showTrace = false;
@@ -1746,16 +1746,13 @@ function initSourceFilter(colors) {
 
     let html = '';
     html += createFilter(colors['adsb'], 'ADS-B', sources[0]);
-
-    // html += createFilter(colors['uat'], 'UAT / ADS-R', sources[1][0]);
-    html += createFilter(colors['mlat'], 'MLAT', sources[2]);
-    // html += createFilter(colors['tisb'], 'TIS-B', sources[3]);
-    html += createFilter(colors['modeS'], 'Mode-S', sources[4]);
-    html += createFilter(colors['other'], 'Other', sources[5]);
-    html += createFilter(colors['uat'], 'ADS-C', sources[6]);
+    html += createFilter(colors['mlat'], 'MLAT', sources[1]);
+    html += createFilter(colors['modeS'], 'Mode-S', sources[2]);
+    html += createFilter(colors['other'], 'Other', sources[3]);
+    html += createFilter(colors['uat'], 'ADS-C', sources[4]);
 
     if (aiscatcher_server) {
-        html += createFilter(colors['ais'], 'AIS', sources[7]);
+        html += createFilter(colors['ais'], 'AIS', sources[5]);
     }
 
     document.getElementById('sourceFilter').innerHTML = html;

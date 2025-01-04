@@ -421,7 +421,7 @@ if (uuid) {
     // don't need receiver / chunks json
 } else if (aggregator) {
     console.log("Using aggregator fast-path load!");
-    let data = {"zstd":true,"reapi":true,"refresh":1000,"history":1,"dbServer":true,"binCraft":true,"globeIndexGrid":3,"globeIndexSpecialTiles":[],"version":"aggregator backend"};
+    let data = {"zstd":true,"reapi":false,"refresh":1000,"history":1,"dbServer":true,"binCraft":true,"globeIndexGrid":null,"globeIndexSpecialTiles":[],"version":"aggregator backend"};
     get_receiver_defer = jQuery.Deferred().resolve(data);
     test_chunk_defer = jQuery.Deferred().reject();
 } else {
