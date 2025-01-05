@@ -423,7 +423,8 @@ if (uuid) {
     console.log("Using aggregator fast-path load!");
     let data = {"zstd":true,"reapi":false,"refresh":1000,"history":1,"dbServer":true,"binCraft":true,"globeIndexGrid":null,"globeIndexSpecialTiles":[],"haveTraces":true,"json_trace_interval": 20.0,"version":"aggregator backend"};
     get_receiver_defer = jQuery.Deferred().resolve(data);
-    test_chunk_defer = jQuery.Deferred().reject();
+    //test_chunk_defer = jQuery.Deferred().reject();
+    test_chunk_defer = chunksDefer();
 } else {
     // get configuration json files, will be used in initialize function
 
