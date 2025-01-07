@@ -137,7 +137,7 @@ MapType_tar1090 = "carto_light_all";
 //monochromeTracks = "#000000";
 //
 
-// altitudeChartDefaultState = true;
+altitudeChartDefaultState = false;
 
 // These settings control the coloring of aircraft by altitude.
 // All color values are given as Hue (0-359) / Saturation (0-100) / Lightness (0-100)

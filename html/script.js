@@ -2425,13 +2425,17 @@ function ol_map_init() {
             zoom: zoomLvl,
             multiWorld: true,
         }),
-        controls: [new ol.control.Zoom({delta: 1, duration: 0, target: 'map_canvas',}),
+        controls: [
             new ol.control.Attribution({collapsed: true}),
             new ol.control.ScaleLine({units: DisplayUnits})
         ],
         interactions: new ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false,}),
         maxTilesLoading: 4,
     });
+
+    if (onMobile) {
+        OLMap.controls.push(new ol.control.Zoom({delta: 1, duration: 0, target: 'map_canvas'}));
+    }
 
     console.time('webglInit');
     webglInit();
