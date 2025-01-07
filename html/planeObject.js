@@ -699,7 +699,16 @@ PlaneObject.prototype.getMarkerColor = function(options) {
 
     let h, s, l;
 
-    let colorArr = altitudeColor(alt);
+    //let colorArr = altitudeColor(alt);
+    let colorArr = [0, 0, 93]; // Almost white
+
+    const operatorColor = getOperatorColor(this.ownOp);
+    if (operatorColor) colorArr = operatorColor;
+
+    const callsignColor = getCallsignColor(this.name);
+    if (callsignColor) colorArr = callsignColor;
+
+    if (this.military) colorArr = [45, 100, 50]; // Orange
 
     h = colorArr[0];
     s = colorArr[1];
@@ -816,6 +825,69 @@ function altitudeColor(altitude) {
     else if (l > 95) l = 95;
 
     return [h, s, l];
+}
+
+function getCallsignColor(callsign) {
+    if (!callsign || callsign == 'no callsign' || callsign == 'empty callsign')
+        return null;
+
+    // Firefighting callsigns
+    const firefightingCallsigns = [
+        "BDOG",
+        "BMBR",
+        "FYRA",
+        "FBIR",
+        "FB",
+        "FSCN",
+        "SPTR",
+        "HLTK"
+    ];
+
+    for (const callsignKey in firefightingCallsigns) {
+        if (new RegExp(firefightingCallsigns[callsignKey] + "\\d+").test(callsign) &&
+            !isNaN(Number(callsign.slice(-1))))
+            return [18, 100, 58]; //Dark orange
+    }
+
+    // Rescue callsigns
+    if (callsign.startsWith('RSCU') &&
+        !isNaN(Number(callsign.slice(-1))))
+        return [86, 73, 43]; // Light green
+
+    // Police callsigns
+    if (callsign.startsWith('POL') &&
+        !isNaN(Number(callsign.slice(-1))))
+        return [222, 100, 50]; // Dark blue
+
+    return false;
+}
+
+function getOperatorColor(ownOp) {
+    if (!ownOp)
+        return null;
+
+    const lowerCaseOwnOp = ownOp.toLowerCase();
+
+    // Police
+    if (lowerCaseOwnOp.includes('police'))
+        return [222, 100, 50]; // Dark blue
+
+    // Medical
+    const medicalOperators = [
+        'lifeflight',
+        'careflight',
+        'flying doctor',
+        'aeromedical',
+        'rescue',
+        'ambulance'
+    ];
+
+    for (const medicalOperatorsKey in medicalOperators) {
+        if (lowerCaseOwnOp.includes(medicalOperators[medicalOperatorsKey]))
+            return [86, 73, 43]; // Light green
+    }
+
+    return null;
 }
 
 PlaneObject.prototype.setMarkerRgb = function() {
