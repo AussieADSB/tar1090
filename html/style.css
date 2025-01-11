@@ -501,7 +501,7 @@ select.error, textarea.error, input.error {
     padding-right: calc( 5px * var(--SCALE));
     box-shadow: calc( 4px * var(--SCALE)) calc( 4px * var(--SCALE)) calc( 10px * var(--SCALE)) #444444;
     cursor: pointer;
-    z-index: 9999;
+    z-index: 9998;
     display: none;
 }
 
@@ -602,13 +602,13 @@ table.infoSectionTable tr td {
 
 #settings_infoblock {
     position: fixed;
-    top: 1%;
+    top: 8%;
     left: 1%;
     overflow: auto;
     max-height: 90%;
     box-shadow: calc( 4px * var(--SCALE)) calc( 4px * var(--SCALE)) calc( 10px * var(--SCALE)) #444444;
     padding: calc( 20px * var(--SCALE));
-    z-index: 9999;
+    z-index: 9998;
     display: none;
     background-color: var(--BGCOLOR1);
 }

@@ -265,6 +265,8 @@ let labelZoomGround = 14.8;
 
 let labelFont = 'bold 12px tahoma';
 
+let enableLabelsDefaultState = false;
+
 let displayUATasADSB = false;
 let uatNoTISB = false;
 

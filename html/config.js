@@ -91,7 +91,7 @@ MapType_tar1090 = "carto_light_all";
 
 // Default map dim state, true or false.
 // MapDim = true;
-// mapDimPercentage = 0.45;
+mapDimPercentage = 0.3;
 // mapContrastPercentage = 0;
 
 // opacities for various overlays
@@ -248,6 +248,7 @@ MapboxAPIKey = null;
 labelZoomGround = 12.5;
 
 labelFont = 'bold 10px tahoma';
+enableLabelsDefaultState = true;
 
 //displayUATasADSB = false;
 //uatNoTISB = true;

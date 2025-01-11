@@ -1123,6 +1123,9 @@ function earlyInitPage() {
     if (loStore['enableLabels'] == 'true' || usp.has('enableLabels')) {
         toggleLabels();
     }
+    else if (loStore['enableLabels'] === undefined && enableLabelsDefaultState) {
+        toggleLabels();
+    }
     if (usp.has('extendedLabels')) {
         extendedLabels = parseInt(usp.getFloat('extendedLabels'));
         toggleExtendedLabels({ noIncrement: true });
@@ -6832,7 +6835,7 @@ function initSitePos() {
             if (SitePosition) {
                 TAR.planeMan.cols.sitedist.sort();
             } else {
-                planeMan.sortAscending = false;
+                TAR.planeMan.sortAscending = false;
                 TAR.planeMan.cols.altitude.sort();
             }
         }
