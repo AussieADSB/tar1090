@@ -922,8 +922,8 @@ PlaneObject.prototype.updateIcon = function() {
             callsign =  'reg: ' + this.registration;
         else
             callsign =   'hex: ' + this.icao;
-        if (useRouteAPI && this.routeString)
-            callsign += ' - ' + this.routeString;
+        // if (useRouteAPI && this.routeString)
+        //     callsign += ' - ' + this.routeString;
 
         const unknown = NBSP+NBSP+"?"+NBSP+NBSP;
 
