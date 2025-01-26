@@ -210,23 +210,23 @@ function createBaseLayers() {
     //     type: 'base',
     // }));
 
-    const date = new Date(Date.now() - 86400 * 1000);
-    const yesterday = date.getUTCFullYear() + '-' + (date.getUTCMonth() + 1).toString().padStart(2, '0') + '-' + date.getUTCDate().toString().padStart(2, '0');
-    world.push(new ol.layer.Tile({
-        source: new ol.source.OSM({
-            url: 'https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg3857/best/' +
-            'MODIS_Terra_CorrectedReflectance_TrueColor/default/' +
-            yesterday + '/' +
-            'GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
-            attributions: '<a href="https://terra.nasa.gov/about/terra-instruments/modis">MODIS Terra</a> ' +
-            yesterday + ' Provided by NASA\'s Global Imagery Browse Services (GIBS), part of NASA\'s Earth Observing System Data and Information System (EOSDIS)',
-            maxZoom: 9,
-            transition: tileTransition,
-        }),
-        name: 'gibs',
-        title: 'GIBS Clouds ' + yesterday,
-        type: 'base',
-    }));
+    // const date = new Date(Date.now() - 86400 * 1000);
+    // const yesterday = date.getUTCFullYear() + '-' + (date.getUTCMonth() + 1).toString().padStart(2, '0') + '-' + date.getUTCDate().toString().padStart(2, '0');
+    // world.push(new ol.layer.Tile({
+    //     source: new ol.source.OSM({
+    //         url: 'https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg3857/best/' +
+    //         'MODIS_Terra_CorrectedReflectance_TrueColor/default/' +
+    //         yesterday + '/' +
+    //         'GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
+    //         attributions: '<a href="https://terra.nasa.gov/about/terra-instruments/modis">MODIS Terra</a> ' +
+    //         yesterday + ' Provided by NASA\'s Global Imagery Browse Services (GIBS), part of NASA\'s Earth Observing System Data and Information System (EOSDIS)',
+    //         maxZoom: 9,
+    //         transition: tileTransition,
+    //     }),
+    //     name: 'gibs',
+    //     title: 'GIBS Clouds ' + yesterday,
+    //     type: 'base',
+    // }));
 
     if (loStore['bingKey'] != undefined)
         BingMapsAPIKey = loStore['bingKey'];

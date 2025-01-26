@@ -4555,14 +4555,14 @@ function resetMap() {
         } else {
             CenterLon = DefaultCenterLon;
             CenterLat = DefaultCenterLat;
+            loStore['zoomLvl'] = zoomLvl = DefaultZoomLvl;
         }
         // Reset loStore values and map settings
         loStore['CenterLat'] = CenterLat
         loStore['CenterLon'] = CenterLon
-        //loStore['zoomLvl']   = zoomLvl = DefaultZoomLvl;
 
         // Set and refresh
-        //OLMap.getView().setZoom(zoomLvl);
+        OLMap.getView().setZoom(zoomLvl);
 
         //console.log('resetMap setting center ' + [CenterLat, CenterLon]);
         OLMap.getView().setCenter(ol.proj.fromLonLat([CenterLon, CenterLat]));
