@@ -9,6 +9,9 @@ let trayOpen = false;
 (window as any).initAircraftViews = init;
 
 async function init() {
+    if (onMobile)
+        return;
+
     eventTarget.addEventListener(events.aircraftSelected.type, async () => {
         if (SelectedPlane && !selectedAircraft.includes(SelectedPlane.icao))
             selectedAircraft.push(SelectedPlane.icao);
@@ -155,7 +158,7 @@ function createTableRowDesktop(rank: number, plane: PlaneObject) {
     summaryRow.append($("<td/>", { text: rank }));
     summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao }));
     summaryRow.append($("<td/>", { text: plane.icaoType ?? "" }));
-    summaryRow.append($("<td/>", { text: plane.callsign ?? "" }));
+    summaryRow.append($("<td/>", { text: plane.name ?? "" }));
 
     const rows = [summaryRow];
 
@@ -174,7 +177,7 @@ function createTableRowMobile(rank: number, plane: PlaneObject) {
     summaryRow.append($("<td/>", { text: rank }));
     summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao }));
     summaryRow.append($("<td/>", { text: plane.icaoType ?? "" }));
-    summaryRow.append($("<td/>", { text: plane.callsign ?? "" }));
+    summaryRow.append($("<td/>", { text: plane.name ?? "" }));
 
     const opRow = $(`<tr><td colspan=4>${plane.ownOp}</td></tr>`);
 

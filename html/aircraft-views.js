@@ -17,6 +17,8 @@ let trayOpen = false;
 window.initAircraftViews = init;
 function init() {
     return __awaiter(this, void 0, void 0, function* () {
+        if (onMobile)
+            return;
         eventTarget.addEventListener(events.aircraftSelected.type, () => __awaiter(this, void 0, void 0, function* () {
             if (SelectedPlane && !selectedAircraft.includes(SelectedPlane.icao))
                 selectedAircraft.push(SelectedPlane.icao);
@@ -135,7 +137,7 @@ function createTableRowDesktop(rank, plane) {
     summaryRow.append($("<td/>", { text: rank }));
     summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao }));
     summaryRow.append($("<td/>", { text: (_a = plane.icaoType) !== null && _a !== void 0 ? _a : "" }));
-    summaryRow.append($("<td/>", { text: (_b = plane.callsign) !== null && _b !== void 0 ? _b : "" }));
+    summaryRow.append($("<td/>", { text: (_b = plane.name) !== null && _b !== void 0 ? _b : "" }));
     const rows = [summaryRow];
     rows.forEach((row) => {
         row.on("click", () => {
@@ -150,7 +152,7 @@ function createTableRowMobile(rank, plane) {
     summaryRow.append($("<td/>", { text: rank }));
     summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao }));
     summaryRow.append($("<td/>", { text: (_a = plane.icaoType) !== null && _a !== void 0 ? _a : "" }));
-    summaryRow.append($("<td/>", { text: (_b = plane.callsign) !== null && _b !== void 0 ? _b : "" }));
+    summaryRow.append($("<td/>", { text: (_b = plane.name) !== null && _b !== void 0 ? _b : "" }));
     const opRow = $(`<tr><td colspan=4>${plane.ownOp}</td></tr>`);
     const rows = [summaryRow, opRow];
     rows.forEach((row) => {

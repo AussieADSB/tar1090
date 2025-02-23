@@ -13,7 +13,7 @@ declare function selectPlaneByHex(hex: string, options: any | undefined): void;
 declare class PlaneObject {
     icao: string;
     registration: string;
-    callsign: string;
+    name: string;
     icaoType: string;
     ownOp: string;
     position: number[];
