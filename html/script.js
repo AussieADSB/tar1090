@@ -451,6 +451,8 @@ function fetchDone(data) {
 
         if (!g.firstFetchDone) { afterFirstFetch(); };
 
+        eventTarget.dispatchEvent(events.fetchDone);
+
         // Check for stale receiver data
         if (last == now && !globeIndex) {
             StaleReceiverCount++;
@@ -704,6 +706,8 @@ function initialize() {
     // things that can run without receiver json being known
     earlyInitPage();
     initMapEarly();
+
+    initAircraftViews();
 
     jQuery.when(configureReceiver, heatmapDefer).done(function() {
 
@@ -4426,6 +4430,7 @@ function select(plane, options) {
     updateAddressBar();
     refreshSelected();
     plane.updateTick('redraw');
+    eventTarget.dispatchEvent(events.aircraftSelected);
 
     if (options.follow) {
         toggleFollow(true);
