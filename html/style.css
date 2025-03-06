@@ -493,7 +493,6 @@ select.error, textarea.error, input.error {
     font-size: calc( 15px * var(--SCALE));
     line-height:  calc( 27px * var(--SCALE));
     text-align: center;
-    margin: calc( 5px * var(--SCALE));
 }
 
 .activeButton {
