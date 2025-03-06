@@ -17,4 +17,5 @@ declare class PlaneObject {
     icaoType: string;
     ownOp: string;
     position: number[];
+    tr: Element;
 }

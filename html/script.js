@@ -4219,6 +4219,8 @@ function refreshFeatures() {
         tbody.remove();
         tbody = newBody;
 
+        eventTarget.dispatchEvent(events.planeTableRefreshDone);
+
         ctime && console.timeEnd("DOM2");
 
         ctime && console.timeEnd("planeMan.refresh()");

@@ -17,8 +17,6 @@ let trayOpen = false;
 window.initAircraftViews = init;
 function init() {
     return __awaiter(this, void 0, void 0, function* () {
-        if (onMobile)
-            return;
         eventTarget.addEventListener(events.aircraftSelected.type, () => __awaiter(this, void 0, void 0, function* () {
             if (SelectedPlane && !selectedAircraft.includes(SelectedPlane.icao))
                 selectedAircraft.push(SelectedPlane.icao);
@@ -36,13 +34,14 @@ function init() {
             });
         }
         eventTarget.addEventListener(events.fetchDone.type, fetchDoneHandler);
-        if (onMobile) {
-            $(document.body).append(createMostWatchedMobile());
-            $(document.body).append(createMostWatchedButtonMobile());
-        }
-        else {
-            $(document.body).append(createMostWatchedDesktop());
-        }
+        eventTarget.addEventListener(events.planeTableRefreshDone.type, refreshUi);
+        // if (onMobile) {
+        //     $(document.body).append(createMostWatchedMobile());
+        //     $(document.body).append(createMostWatchedButtonMobile());
+        // }
+        // else {
+        //     $(document.body).append(createMostWatchedDesktop());
+        // }
         setInterval(() => __awaiter(this, void 0, void 0, function* () {
             yield sendView();
         }), pollIntervalMs);
@@ -83,14 +82,20 @@ function mapViewedAircraft(response) {
 function refreshUi() {
     const container = $("#most-watched-container");
     const table = $("<table/>");
+    table.append($('#planesTable .aircraft_table_header').first().clone());
     for (let i = 0; i < mostViewed.length; i++) {
         const plane = mostViewed[i].plane;
-        if (onMobile) {
-            table.append(createTableRowMobile(i + 1, plane));
-        }
-        else {
-            table.append(createTableRowDesktop(i + 1, plane));
-        }
+        const row = $(plane.tr).clone();
+        row.on("click", () => {
+            selectPlaneByHex(plane.icao, { follow: true });
+        });
+        table.append(row);
+        // if (onMobile) {
+        //     table.append(createTableRowMobile(i + 1, plane));
+        // }
+        // else {
+        //     table.append(createTableRowDesktop(i + 1, plane));
+        // }
     }
     container.html("");
     container.append(table);
@@ -135,7 +140,7 @@ function createTableRowDesktop(rank, plane) {
     var _a, _b;
     const summaryRow = $("<tr/>");
     summaryRow.append($("<td/>", { text: rank }));
-    summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao }));
+    summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao.toUpperCase() }));
     summaryRow.append($("<td/>", { text: (_a = plane.icaoType) !== null && _a !== void 0 ? _a : "" }));
     summaryRow.append($("<td/>", { text: (_b = plane.name) !== null && _b !== void 0 ? _b : "" }));
     const rows = [summaryRow];
@@ -150,7 +155,7 @@ function createTableRowMobile(rank, plane) {
     var _a, _b;
     const summaryRow = $("<tr/>");
     summaryRow.append($("<td/>", { text: rank }));
-    summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao }));
+    summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao.toUpperCase() }));
     summaryRow.append($("<td/>", { text: (_a = plane.icaoType) !== null && _a !== void 0 ? _a : "" }));
     summaryRow.append($("<td/>", { text: (_b = plane.name) !== null && _b !== void 0 ? _b : "" }));
     const opRow = $(`<tr><td colspan=4>${plane.ownOp}</td></tr>`);

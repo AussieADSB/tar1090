@@ -9,9 +9,6 @@ let trayOpen = false;
 (window as any).initAircraftViews = init;
 
 async function init() {
-    if (onMobile)
-        return;
-
     eventTarget.addEventListener(events.aircraftSelected.type, async () => {
         if (SelectedPlane && !selectedAircraft.includes(SelectedPlane.icao))
             selectedAircraft.push(SelectedPlane.icao);
@@ -31,14 +28,15 @@ async function init() {
     }
 
     eventTarget.addEventListener(events.fetchDone.type, fetchDoneHandler);
+    eventTarget.addEventListener(events.planeTableRefreshDone.type, refreshUi);
 
-    if (onMobile) {
-        $(document.body).append(createMostWatchedMobile());
-        $(document.body).append(createMostWatchedButtonMobile());
-    }
-    else {
-        $(document.body).append(createMostWatchedDesktop());
-    }
+    // if (onMobile) {
+    //     $(document.body).append(createMostWatchedMobile());
+    //     $(document.body).append(createMostWatchedButtonMobile());
+    // }
+    // else {
+    //     $(document.body).append(createMostWatchedDesktop());
+    // }
 
     setInterval(async () => {
         await sendView();
@@ -90,15 +88,24 @@ function refreshUi() {
 
     const table = $("<table/>");
 
+    table.append($('#planesTable .aircraft_table_header').first().clone());
+
     for (let i = 0; i < mostViewed.length; i++) {
         const plane = mostViewed[i].plane;
 
-        if (onMobile) {
-            table.append(createTableRowMobile(i + 1, plane));
-        }
-        else {
-            table.append(createTableRowDesktop(i + 1, plane));
-        }
+        const row = $(plane.tr).clone();
+        row.on("click", () => {
+            selectPlaneByHex(plane.icao, {follow: true});
+        });
+
+        table.append(row);
+
+        // if (onMobile) {
+        //     table.append(createTableRowMobile(i + 1, plane));
+        // }
+        // else {
+        //     table.append(createTableRowDesktop(i + 1, plane));
+        // }
     }
 
     container.html("");
@@ -156,7 +163,7 @@ function createTableRowDesktop(rank: number, plane: PlaneObject) {
     const summaryRow = $("<tr/>");
 
     summaryRow.append($("<td/>", { text: rank }));
-    summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao }));
+    summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao.toUpperCase() }));
     summaryRow.append($("<td/>", { text: plane.icaoType ?? "" }));
     summaryRow.append($("<td/>", { text: plane.name ?? "" }));
 
@@ -175,7 +182,7 @@ function createTableRowMobile(rank: number, plane: PlaneObject) {
     const summaryRow = $("<tr/>");
 
     summaryRow.append($("<td/>", { text: rank }));
-    summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao }));
+    summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao.toUpperCase() }));
     summaryRow.append($("<td/>", { text: plane.icaoType ?? "" }));
     summaryRow.append($("<td/>", { text: plane.name ?? "" }));
 

@@ -924,21 +924,15 @@ input{
 
 #most-watched-container table {
     width: 100%;
-    border-spacing: 0;
+    font-size: var(--FS2);
+    white-space: nowrap;
 }
 
 #most-watched-container table td {
-    padding: 4px;
-    border-top: 1px solid #555;
-    text-align: center;
     cursor: pointer;
 }
 
-#most-watched-container table tr td {
-    border-top: 1px solid #555;
-}
-
-#most-watched-container table tr:hover {
+#most-watched-container table>tr:hover {
     background-color: #555 !important;
 }
 
