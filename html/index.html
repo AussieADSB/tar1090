@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE HTML>
-<html>
+<html lang="en">
   <head>
     <meta name="description" content="tar1090 - ADS-B plane tracking interface">
 
@@ -33,6 +33,7 @@
   </head>
 
   <body>
+    <iframe id="navbar" src="/navbar"></iframe>
     <!-- BODY_ANCHOR -->
     <div id="layout_container">
 
@@ -903,7 +904,7 @@
                           <span class="infoBlockTitleText">Altimeter:</span>
                           <span> <input id="altimeter_input" type="number" step="0.01" value="29.92" class="searchInput"></span>
                           <span> <button class="formButton" type="submit">Set</button></span>
-                          <span> <button class="formButton" type="button" id="altimeter_set_standard">Standard</button>
+                          <span> <button class="formButton" type="button" id="altimeter_set_standard">Standard</button></span>
                         </form>
                       </td>
                     </tr>
@@ -1049,6 +1050,9 @@
     <div id="js_error" class="hidden"></div>
     <div id="container_splitter"></div>
 
+    <div id="navtrayoverlay"></div>
+    <iframe id="navtray" src="/navtray"></iframe>
+
     <script>let databaseFolder = "db2";</script>
     <!-- JS_ANCHOR1 -->
     <script src="libs/jquery-3.6.1.min.js"></script>
@@ -1073,7 +1077,6 @@
     <script src="geomag2020.js"></script>
     <script src="markers.js"></script>
 
-    <script src="navigation.js"></script>
     <script src="events.js"></script>
     <script src="aircraft-views.js"></script>
 

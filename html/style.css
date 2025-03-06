@@ -946,3 +946,63 @@ input{
 #most-watched-container table tr td:last-child {
     padding-right: 6px;
 }
+
+#layout_container {
+    height: calc(100% - 8vh);
+}
+
+#navbar {
+    height: 8vh;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+    border: none;
+    display: block;
+}
+
+@media (min-height: 576px) {
+    #navbar {
+        height: 6vh;
+    }
+
+    #layout_container {
+        height: calc(100% - 6vh);
+    }
+}
+
+@media (min-height: 1200px) {
+    #navbar {
+        height: 4vh;
+    }
+
+    #layout_container {
+        height: calc(100% - 4vh);
+    }
+}
+
+#navtray {
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: -75%;
+    z-index: 99999;
+    width: 75%;
+    border: none;
+    transition: left 0.15s;
+    max-width: 400px;
+}
+
+#navtrayoverlay {
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    background-color: black;
+    z-index: 9999;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: opacity 0.15s;
+    opacity: 0;
+}
