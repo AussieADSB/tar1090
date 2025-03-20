@@ -9,6 +9,20 @@
     --TXTCOLOR1: #003f4b;
     --TXTCOLOR2: #050505;
     --TXTCOLOR3: #101010;
+
+    --NAVBARHEIGHT: 8vh;
+}
+
+@media (min-height: 576px) {
+    :root {
+        --NAVBARHEIGHT: 6vh;
+    }
+}
+
+@media (min-height: 1200px) {
+    :root {
+        --NAVBARHEIGHT: 4vh;
+    }
 }
 
 html, body {
@@ -45,7 +59,7 @@ select {
     left: 0px;
     bottom: 0px;
     width:  calc(180px * var(--SCALE));
-    height: 100%;
+    height: calc(100% - var(--NAVBARHEIGHT));
     overflow: auto;
     z-index: 1;
     background-color: var(--BGCOLOR1);
@@ -948,11 +962,11 @@ input{
 }
 
 #layout_container {
-    height: calc(100% - 8vh);
+    height: calc(100% - var(--NAVBARHEIGHT));
 }
 
 #navbar {
-    height: 8vh;
+    height: var(--NAVBARHEIGHT);
     position: relative;
     top: 0;
     left: 0;
@@ -960,26 +974,6 @@ input{
     z-index: 99;
     border: none;
     display: block;
-}
-
-@media (min-height: 576px) {
-    #navbar {
-        height: 6vh;
-    }
-
-    #layout_container {
-        height: calc(100% - 6vh);
-    }
-}
-
-@media (min-height: 1200px) {
-    #navbar {
-        height: 4vh;
-    }
-
-    #layout_container {
-        height: calc(100% - 4vh);
-    }
 }
 
 #navtray {
