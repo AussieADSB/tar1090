@@ -1050,6 +1050,11 @@
     <div id="js_error" class="hidden"></div>
     <div id="container_splitter"></div>
 
+    <div id="airspaces-popup" class="ol-popup">
+      <span id="airspaces-popup-closer" class="ol-popup-closer">✖</span>
+      <div id="airspaces-popup-content"></div>
+    </div>
+
     <div id="navtrayoverlay"></div>
     <iframe id="navtray" src="/navtray"></iframe>
 
@@ -1077,8 +1082,12 @@
     <script src="geomag2020.js"></script>
     <script src="markers.js"></script>
 
+    <script>let exports = {};</script>
     <script src="events.js"></script>
     <script src="aircraft-views.js"></script>
+    <script src="airspaces-enums.js"></script>
+    <script src="layers/airspaces.js"></script>
+    <script src="layers-manager.js"></script>
 
     <!-- JS_ANCHOR3 -->
     <script src="planeObject.js"></script>

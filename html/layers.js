@@ -18,7 +18,9 @@ function createBaseLayers() {
         layers: layers,
     });
 
-    let world = new ol.Collection();
+    let basemaps = new ol.Collection();
+    let weather = new ol.Collection();
+    let navigation = new ol.Collection();
     //let us = new ol.Collection();
     //let europe = new ol.Collection();
 
@@ -48,7 +50,7 @@ function createBaseLayers() {
     */
 
     if (offlineMapDetail > 0) {
-        world.push(new ol.layer.Tile({
+        basemaps.push(new ol.layer.Tile({
             source: new ol.source.OSM({
                 "url" : "osm_tiles_offline/{z}/{x}/{y}.png",
                 attributionsCollapsible: false,
@@ -70,10 +72,10 @@ function createBaseLayers() {
         });
         // ol-mapbox-style plugin packed in with ol ... (kinda ugly)
         ol.applyStyle(openfreemap, "https://tiles.openfreemap.org/styles/liberty");
-        world.push(openfreemap);
+        basemaps.push(openfreemap);
     }
 
-    world.push(new ol.layer.Tile({
+    basemaps.push(new ol.layer.Tile({
         source: new ol.source.OSM({
             maxZoom: 17,
             attributionsCollapsible: false,
@@ -100,7 +102,7 @@ function createBaseLayers() {
         for (let i in cartoBasemaps) {
             let cartoBasemap = cartoBasemaps[i];
 
-            world.push(new ol.layer.Tile({
+            basemaps.push(new ol.layer.Tile({
                 source: new ol.source.OSM({
                     "url" : "https://{a-d}.basemaps.cartocdn.com/"+ cartoBasemap.id + "/{z}/{x}/{y}.png",
                     "attributions" : 'Powered by <a href="https://carto.com">CARTO.com</a>'
@@ -129,7 +131,7 @@ function createBaseLayers() {
     // }));
 
     {
-        world.push(new ol.layer.Tile({
+        basemaps.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
                 attributions: 'Powered by <a href="https://www.esri.com">Esri.com</a>' +
@@ -142,7 +144,7 @@ function createBaseLayers() {
             title: 'Esri Satellite',
             type: 'base',
         }));
-        world.push(new ol.layer.Tile({
+        basemaps.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 url: "https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
                 attributions: 'Powered by <a href="https://www.esri.com">Esri.com</a>' +
@@ -155,7 +157,7 @@ function createBaseLayers() {
             title: 'Esri Gray',
             type: 'base',
         }));
-        world.push(new ol.layer.Tile({
+        basemaps.push(new ol.layer.Tile({
             source: new ol.source.XYZ({
                 url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
                 attributions: 'Powered by <a href="https://www.esri.com">Esri.com</a>' +
@@ -180,7 +182,7 @@ function createBaseLayers() {
         });
         // ol-mapbox-style plugin packed in with ol ... (kinda ugly)
         //ol.applyStyle(english_map, "https://tiles.adsb.co/api/maps/basic/style.json");
-        world.push(english_map);
+        basemaps.push(english_map);
     }
 
     // if (0) {
@@ -244,7 +246,7 @@ function createBaseLayers() {
         BingMapsAPIKey = loStore['bingKey'];
 
     if (BingMapsAPIKey) {
-        world.push(new ol.layer.Tile({
+        basemaps.push(new ol.layer.Tile({
             source: new ol.source.BingMaps({
                 key: BingMapsAPIKey,
                 imagerySet: 'Aerial',
@@ -254,7 +256,7 @@ function createBaseLayers() {
             title: 'Bing Aerial',
             type: 'base',
         }));
-        world.push(new ol.layer.Tile({
+        basemaps.push(new ol.layer.Tile({
             source: new ol.source.BingMaps({
                 key: BingMapsAPIKey,
                 imagerySet: 'RoadOnDemand',
@@ -270,7 +272,7 @@ function createBaseLayers() {
         MapboxAPIKey = loStore['mapboxKey'];
 
     if (MapboxAPIKey) {
-        world.push(new ol.MapboxVectorLayer({
+        basemaps.push(new ol.MapboxVectorLayer({
             styleUrl: 'mapbox://styles/mapbox/streets-v10',
             accessToken: MapboxAPIKey,
             properties: {
@@ -279,7 +281,7 @@ function createBaseLayers() {
                 type: 'base',
             },
         }));
-        world.push(new ol.MapboxVectorLayer({
+        basemaps.push(new ol.MapboxVectorLayer({
             styleUrl: 'mapbox://styles/mapbox/light-v11',
             accessToken: MapboxAPIKey,
             properties: {
@@ -288,7 +290,7 @@ function createBaseLayers() {
                 type: 'base',
             },
         }));
-        world.push(new ol.MapboxVectorLayer({
+        basemaps.push(new ol.MapboxVectorLayer({
             styleUrl: 'mapbox://styles/mapbox/dark-v11',
             accessToken: MapboxAPIKey,
             properties: {
@@ -297,7 +299,7 @@ function createBaseLayers() {
                 type: 'base',
             },
         }));
-        world.push(new ol.MapboxVectorLayer({
+        basemaps.push(new ol.MapboxVectorLayer({
             styleUrl: 'mapbox://styles/mapbox/outdoors-v10',
             accessToken: MapboxAPIKey,
             properties: {
@@ -397,7 +399,7 @@ function createBaseLayers() {
         }
     } */
 
-    world.push(new ol.layer.Tile({
+    navigation.push(new ol.layer.Tile({
         source: new ol.source.XYZ({
             "url" : "https://map.adsbexchange.com/mapproxy/tiles/1.0.0/openaip/ul_grid/{z}/{x}/{y}.png",
             "attributions" : "openAIP.net",
@@ -653,7 +655,7 @@ function createBaseLayers() {
             }
         });
 
-        world.push(rainviewerRadar);
+        weather.push(rainviewerRadar);
 
 
 
@@ -686,7 +688,7 @@ function createBaseLayers() {
             }
         });
 
-        world.push(rainviewerClouds);
+        weather.push(rainviewerClouds);
     }
 
     let createGeoJsonLayer = function (title, name, url, fill, stroke, showLabel = true) {
@@ -826,7 +828,7 @@ function createBaseLayers() {
                 });
             }
         });
-        world.push(g.aiscatcherLayer);
+        basemaps.push(g.aiscatcherLayer);
     }
 
     if (custom_layers.getLength() > 0) {
@@ -855,17 +857,26 @@ function createBaseLayers() {
     //     }));
     // }
 
-    if (world.getLength() > 0) {
+    if (basemaps.getLength() > 0) {
         layers.push(new ol.layer.Group({
-            name: 'world',
-            title: 'Worldwide',
-            layers: new ol.Collection(world.getArray().reverse()),
+            name: 'basemaps',
+            title: 'Base Maps',
+            layers: new ol.Collection(basemaps.getArray().reverse()),
             //fold: 'open',
         }));
     }
 
+    layers.push(new ol.layer.Group({
+        name: 'weather',
+        title: 'Weather',
+        layers: new ol.Collection(weather.getArray().reverse()),
+    }));
 
-
+    layers.push(new ol.layer.Group({
+        name: 'navigation',
+        title: 'Navigation',
+        layers: new ol.Collection(navigation.getArray().reverse()),
+    }));
 
     return layers_group;
 }

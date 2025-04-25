@@ -451,7 +451,7 @@ function fetchDone(data) {
 
         if (!g.firstFetchDone) { afterFirstFetch(); };
 
-        eventTarget.dispatchEvent(events.fetchDone);
+        eventTarget.dispatchEvent(new Event(eventTypes.fetchDone));
 
         // Check for stale receiver data
         if (last == now && !globeIndex) {
@@ -2366,7 +2366,6 @@ function webglAddLayer() {
         webglLayer = new ol.layer.WebGLPoints({
             name: 'webglLayer',
             type: 'overlay',
-            title: 'Aircraft pos. webGL',
             source: webglFeatures,
             declutter: false,
             zIndex: 200,
@@ -2571,6 +2570,8 @@ function ol_map_init() {
     });
 
     OLMap.on(['click', 'dblclick'], function(evt) {
+        eventTarget.dispatchEvent(new CustomEvent(eventTypes.mapClick, {detail: evt}));
+
         let trailHex = null;
         let trailTS = null;
         let planeHex = null;
@@ -2662,6 +2663,8 @@ function initMapEarly() {
 
     layers_group = createBaseLayers();
     layers = layers_group.getLayers();
+
+    window.layersManager.addCustomLayers();
 
     //add_kml_overlay('https://developers.google.com/kml/documentation/KML_Samples.kml', 'samples', 0.8);
 
@@ -2788,7 +2791,6 @@ function initMap() {
 
     trailLayers = new ol.layer.Group({
         name: 'ac_trail',
-        title: 'Aircraft trails',
         type: 'overlay',
         layers: trailGroup,
         zIndex: 150,
@@ -2799,7 +2801,6 @@ function initMap() {
     iconLayer = new ol.layer.Vector({
         name: 'iconLayer',
         type: 'overlay',
-        title: 'Aircraft positions',
         source: PlaneIconFeatures,
         declutter: false,
         zIndex: 200,
@@ -2809,6 +2810,8 @@ function initMap() {
 
 
     ol_map_init();
+
+    window.layersManager.initCustomLayers();
 
     // handle the layer settings pane checkboxes
     //OLMap.once('postrender', function(e) {
@@ -4219,7 +4222,7 @@ function refreshFeatures() {
         tbody.remove();
         tbody = newBody;
 
-        eventTarget.dispatchEvent(events.planeTableRefreshDone);
+        eventTarget.dispatchEvent(new Event(eventTypes.planeTableRefreshDone));
 
         ctime && console.timeEnd("DOM2");
 
@@ -4432,7 +4435,7 @@ function select(plane, options) {
     updateAddressBar();
     refreshSelected();
     plane.updateTick('redraw');
-    eventTarget.dispatchEvent(events.aircraftSelected);
+    eventTarget.dispatchEvent(new Event(eventTypes.aircraftSelected));
 
     if (options.follow) {
         toggleFollow(true);

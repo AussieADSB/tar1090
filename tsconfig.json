@@ -2,18 +2,18 @@
   "compileOnSave": true,
   "compilerOptions": {
     "target": "ES6",
-    "esModuleInterop": true,
+    "module": "none",
+    "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "noEmitOnError": true,
     "allowUmdGlobalAccess": true,
     "lib": [
       "ES2016",
       "DOM",
       "DOM.Iterable"
     ],
-    "typeRoots": ["node_modules/@types", "./src/@types"],
+    "typeRoots": ["node_modules/@types", "./src/@types", "node_modules/ol/**"],
     "rootDir": "./src",
     "outDir": "./html"
   }

@@ -9,13 +9,13 @@ let trayOpen = false;
 (window as any).initAircraftViews = init;
 
 async function init() {
-    eventTarget.addEventListener(events.aircraftSelected.type, async () => {
+    eventTarget.addEventListener(eventTypes.aircraftSelected, async () => {
         if (SelectedPlane && !selectedAircraft.includes(SelectedPlane.icao))
             selectedAircraft.push(SelectedPlane.icao);
     });
 
     async function fetchDoneHandler() {
-        eventTarget.removeEventListener(events.fetchDone.type, fetchDoneHandler);
+        eventTarget.removeEventListener(eventTypes.fetchDone, fetchDoneHandler);
 
         await $.ajax("/api/aircraft-view/most-viewed",
             {
@@ -27,8 +27,8 @@ async function init() {
             });
     }
 
-    eventTarget.addEventListener(events.fetchDone.type, fetchDoneHandler);
-    eventTarget.addEventListener(events.planeTableRefreshDone.type, refreshUi);
+    eventTarget.addEventListener(eventTypes.fetchDone, fetchDoneHandler);
+    eventTarget.addEventListener(eventTypes.planeTableRefreshDone, refreshUi);
 
     // if (onMobile) {
     //     $(document.body).append(createMostWatchedMobile());
