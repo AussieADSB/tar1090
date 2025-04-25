@@ -68,10 +68,10 @@ class AirspacesLayer {
                 if (layer.get("name") == "airspaces") {
                     layer.getLayers().forEach(layer => {
                         if (layer.get("name") == "class_r_airspaces") {
-                            this.styleLayersWithStatus(layer, "#FF0000");
+                            this.styleLayersWithStatus(layer, "#FF000080");
                         }
                         if (layer.get("name") == "class_q_airspaces") {
-                            this.styleLayersWithStatus(layer, "#FF00FF");
+                            this.styleLayersWithStatus(layer, "#FF00FF80");
                         }
                     });
                 }
@@ -401,11 +401,11 @@ class AirspacesLayer {
         layer.getSource().forEachFeature(feature => {
             feature.setStyle(new ol.style.Style({
                 fill: new ol.style.Fill({
-                    color: colour,
+                    color: colour
                 }),
                 stroke: new ol.style.Stroke({
                     color: "black",
-                    width: 2
+                    width: 1
                 })
             }));
         });
@@ -436,7 +436,7 @@ class AirspacesLayer {
                 }),
                 stroke: new ol.style.Stroke({
                     color: strokeColour,
-                    width: 2
+                    width: 1
                 })
             }));
         });
