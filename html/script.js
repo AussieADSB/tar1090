@@ -2366,6 +2366,7 @@ function webglAddLayer() {
         webglLayer = new ol.layer.WebGLPoints({
             name: 'webglLayer',
             type: 'overlay',
+            title: 'Aircraft pos. webGL',
             source: webglFeatures,
             declutter: false,
             zIndex: 200,
@@ -2801,6 +2802,7 @@ function initMap() {
     iconLayer = new ol.layer.Vector({
         name: 'iconLayer',
         type: 'overlay',
+        title: 'Aircraft positions',
         source: PlaneIconFeatures,
         declutter: false,
         zIndex: 200,
