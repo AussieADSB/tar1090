@@ -887,24 +887,27 @@ function createBaseLayers() {
     // }
 
     if (basemaps.getLength() > 0) {
+        basemaps.getArray().reverse();
         layers.push(new ol.layer.Group({
             name: 'basemaps',
             title: 'Base Maps',
-            layers: new ol.Collection(basemaps.getArray().reverse()),
+            layers: basemaps,
             //fold: 'open',
         }));
     }
 
+    weather.getArray().reverse();
     layers.push(new ol.layer.Group({
         name: 'weather',
         title: 'Weather',
-        layers: new ol.Collection(weather.getArray().reverse()),
+        layers: weather
     }));
 
+    navigation.getArray().reverse();
     layers.push(new ol.layer.Group({
         name: 'navigation',
         title: 'Navigation',
-        layers: new ol.Collection(navigation.getArray().reverse()),
+        layers: navigation,
     }));
 
     return layers_group;

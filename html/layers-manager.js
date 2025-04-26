@@ -11,7 +11,7 @@ class LayersManager {
     addCustomLayers() {
         window.airspacesLayer.addLayers();
         // Reverse the order of the layers so newer layers are at the bottom of the layer switcher
-        layers = new ol.Collection(layers.getArray().reverse());
+        layers.getArray().reverse();
     }
     /**
      * Initialize custom layers
