@@ -3,6 +3,7 @@
 declare var g: {
     planes: { [key: string]: any };
     planesOrdered: any[];
+    aiscatcherLayer: ol.layer.Vector;
 };
 
 declare var OLMap: ol.Map;
@@ -11,6 +12,9 @@ declare var SelectedPlane: PlaneObject | null;
 declare var SelPlanes: PlaneObject[];
 declare var onMobile: boolean;
 declare var layers: ol.Collection<ol.layer.Base>;
+declare var globalScale: number;
+declare var iconLayer: ol.layer.Vector;
+declare var webglLayer: ol.layer.WebGLPoints;
 
 declare function selectPlaneByHex(hex: string, options: any | undefined): void;
 
@@ -31,4 +35,5 @@ declare namespace ol {
 interface Window {
     layersManager: LayersManager;
     airspacesLayer: AirspacesLayer;
+    aircraftViews: AircraftViews;
 }

@@ -26,13 +26,19 @@ class AirspacesLayer {
         OLMap.addOverlay(this.popupOverlay);
 
         eventTarget.addEventListener(eventTypes.mapClick, (event: Event) => {
-            const mapEvent = (event as CustomEvent).detail as ol.MapBrowserEvent;
+            const mapEvent = (event as CustomEvent).detail.event as ol.MapBrowserEvent;
+            const selectedHex = (event as CustomEvent).detail.hex as string;
+
+            if (selectedHex) {
+                this.hideInfobox();
+                return;
+            }
 
             this.onAirspacesClick(mapEvent);
         });
 
         this.popupCloseButton.addEventListener('click', () => {
-            this.popupOverlay!.setPosition(undefined);
+            this.hideInfobox();
             this.popupCloseButton!.blur();
             return false;
         });
@@ -167,13 +173,17 @@ class AirspacesLayer {
             if (feature === undefined) return;
 
             airspaces.push(feature as ol.Feature);
+        }, {
+            layerFilter: (layer: ol.layer.Layer) => {
+                return layer.get("name").endsWith("airspaces");
+            }
         });
 
         if (airspaces.length) {
             this.showInfobox(event.coordinate, airspaces);
         }
-        else if (this.popupOverlay) {
-            this.popupOverlay.setPosition(undefined);
+        else {
+            this.hideInfobox()
         }
     }
 
@@ -299,6 +309,12 @@ class AirspacesLayer {
 
         this.popupContent.innerHTML = content;
         this.popupOverlay.setPosition(latLng);
+    }
+
+    private hideInfobox() {
+        if (this.popupOverlay) {
+            this.popupOverlay.setPosition(undefined);
+        }
     }
 
     private createActivationRowInfobox(type: ActivationType, time: HTMLElement, alt: HTMLElement, statusType: AussieADSB.Website.Models.StatusType, first: boolean) {

@@ -1,216 +1,100 @@
-let selectedAircraft: string[] = [];
-let mostViewed: ViewedAircraft[] = [];
-const pollIntervalMs = 10000;
-const maxCount = 10;
+class AircraftViews {
+    private selectedAircraft: string[] = [];
+    private mostViewed: ViewedAircraft[] = [];
+    private pollIntervalMs = 10000;
+    private maxCount = 10;
 
-let uiContainer: JQuery;
-let trayOpen = false;
+    public async init() {
+        eventTarget.addEventListener(eventTypes.aircraftSelected, async () => {
+            if (SelectedPlane && !this.selectedAircraft.includes(SelectedPlane.icao))
+                this.selectedAircraft.push(SelectedPlane.icao);
+        });
 
-(window as any).initAircraftViews = init;
+        const fetchDoneHandler = async () => {
+            eventTarget.removeEventListener(eventTypes.fetchDone, fetchDoneHandler);
 
-async function init() {
-    eventTarget.addEventListener(eventTypes.aircraftSelected, async () => {
-        if (SelectedPlane && !selectedAircraft.includes(SelectedPlane.icao))
-            selectedAircraft.push(SelectedPlane.icao);
-    });
-
-    async function fetchDoneHandler() {
-        eventTarget.removeEventListener(eventTypes.fetchDone, fetchDoneHandler);
-
-        await $.ajax("/api/aircraft-view/most-viewed",
-            {
-                type: "GET",
-                success: (response: AussieADSB.Website.Models.ViewedAircraft[]) => {
-                    mostViewed = mapViewedAircraft(response);
-                    refreshUi();
-                }
-            });
-    }
-
-    eventTarget.addEventListener(eventTypes.fetchDone, fetchDoneHandler);
-    eventTarget.addEventListener(eventTypes.planeTableRefreshDone, refreshUi);
-
-    // if (onMobile) {
-    //     $(document.body).append(createMostWatchedMobile());
-    //     $(document.body).append(createMostWatchedButtonMobile());
-    // }
-    // else {
-    //     $(document.body).append(createMostWatchedDesktop());
-    // }
-
-    setInterval(async () => {
-        await sendView();
-    }, pollIntervalMs);
-}
-
-async function sendView() {
-    const request: AussieADSB.Website.Models.IAddViewRequest = {
-        currentlySelectedAircraftIcao: SelectedPlane?.icao,
-        selectedAircraftIcaos: selectedAircraft
-    };
-
-    await $.ajax("/api/aircraft-view/add", {
-        type: "POST",
-        data: JSON.stringify(request),
-        contentType: "application/json",
-        success: (response: AussieADSB.Website.Models.ViewedAircraft[]) => {
-            mostViewed = mapViewedAircraft(response);
-            refreshUi();
+            await $.ajax("/api/aircraft-view/most-viewed",
+                {
+                    type: "GET",
+                    success: (response: AussieADSB.Website.Models.ViewedAircraft[]) => {
+                        this.mostViewed = this.mapViewedAircraft(response);
+                        this.refreshUi();
+                    }
+                });
         }
-    });
 
-    selectedAircraft = [];
-}
+        eventTarget.addEventListener(eventTypes.fetchDone, fetchDoneHandler);
+        eventTarget.addEventListener(eventTypes.planeTableRefreshDone, () => this.refreshUi());
 
-function mapViewedAircraft(response: AussieADSB.Website.Models.ViewedAircraft[]): ViewedAircraft[] {
-    const mostViewedAircraft: ViewedAircraft[] = [];
-    let count = 0;
-
-    for (let viewedAircraft of response) {
-        const plane = g.planes[viewedAircraft.icao.toLowerCase()];
-
-        if (plane === undefined)
-            continue;
-
-        mostViewedAircraft.push(new ViewedAircraft(plane, viewedAircraft.views));
-
-        count++;
-
-        if (count === maxCount)
-            return mostViewedAircraft;
+        setInterval(async () => {
+            await this.sendView();
+        }, this.pollIntervalMs);
     }
 
-    return mostViewedAircraft;
-}
+    private async sendView() {
+        const request: AussieADSB.Website.Models.IAddViewRequest = {
+            currentlySelectedAircraftIcao: SelectedPlane?.icao,
+            selectedAircraftIcaos: this.selectedAircraft
+        };
 
-function refreshUi() {
-    const container = $("#most-watched-container");
-
-    const table = $("<table/>");
-
-    table.append($('#planesTable .aircraft_table_header').first().clone());
-
-    for (let i = 0; i < mostViewed.length; i++) {
-        const plane = mostViewed[i].plane;
-
-        const row = $(plane.tr).clone();
-        row.on("click", () => {
-            selectPlaneByHex(plane.icao, {follow: true});
+        await $.ajax("/api/aircraft-view/add", {
+            type: "POST",
+            data: JSON.stringify(request),
+            contentType: "application/json",
+            success: (response: AussieADSB.Website.Models.ViewedAircraft[]) => {
+                this.mostViewed = this.mapViewedAircraft(response);
+                this.refreshUi();
+            }
         });
 
-        table.append(row);
-
-        // if (onMobile) {
-        //     table.append(createTableRowMobile(i + 1, plane));
-        // }
-        // else {
-        //     table.append(createTableRowDesktop(i + 1, plane));
-        // }
+        this.selectedAircraft = [];
     }
 
-    container.html("");
-    container.append(table);
+    private mapViewedAircraft(response: AussieADSB.Website.Models.ViewedAircraft[]): ViewedAircraft[] {
+        const mostViewedAircraft: ViewedAircraft[] = [];
+        let count = 0;
+
+        for (let viewedAircraft of response) {
+            const plane = g.planes[viewedAircraft.icao.toLowerCase()];
+
+            if (plane === undefined)
+                continue;
+
+            mostViewedAircraft.push(new ViewedAircraft(plane, viewedAircraft.views));
+
+            count++;
+
+            if (count === this.maxCount)
+                return mostViewedAircraft;
+        }
+
+        return mostViewedAircraft;
+    }
+
+    private refreshUi() {
+        const container = $("#most-watched-container");
+
+        const table = $("<table/>");
+
+        table.append($('#planesTable .aircraft_table_header').first().clone());
+
+        for (let i = 0; i < this.mostViewed.length; i++) {
+            const plane = this.mostViewed[i].plane;
+
+            const row = $(plane.tr).clone();
+            row.on("click", () => {
+                selectPlaneByHex(plane.icao, {follow: true});
+            });
+
+            table.append(row);
+        }
+
+        container.html("");
+        container.append(table);
+    }
 }
 
-function createMostWatchedDesktop() {
-    uiContainer = $("<div></div>", { class: "vrs-map-element", id: "most-watched" });
-
-    const map = $("#map_container");
-    uiContainer.css("left", map.offset()!.left + 10);
-    uiContainer.css("top", map.offset()!.top + 10);
-
-    const mwTitle = $("<p id='most-watched-title'><b>Most Watched Aircraft</b></p>");
-    uiContainer.append(mwTitle);
-
-    const mwBody = $("<div/>", { id: "most-watched-container" });
-    uiContainer.append(mwBody);
-
-    return uiContainer;
-}
-
-function createMostWatchedMobile() {
-    uiContainer = $("<div/>", { id: "most-watched" });
-    uiContainer.css("max-height", `calc(100% - ${getNavbarHeight()})`);
-    uiContainer.css("top", getNavbarHeight());
-
-    const mwHeader = $("<div/>", { id: "most-watched-header" });
-    mwHeader.append($("<h3/>", { id: "most-watched-title", text: "Most Watched Aircraft" }));
-    const mwCloseButton = $("<a/>", { id: "most-watched-close-button" }).on("click", closeTray);
-    mwCloseButton.append($("<span/>", { text: "\u2A2F" }));
-    mwHeader.append(mwCloseButton);
-    uiContainer.append(mwHeader);
-
-    const mwBody = $("<div/>", { id: "most-watched-container" });
-    uiContainer.append(mwBody);
-
-    return uiContainer;
-}
-
-function createMostWatchedButtonMobile() {
-    const button = $("<div></div>", { class: "mapButton" });
-    button.append($("<span>Most Watched</span>"));
-    button.on("click", () => {
-        if (trayOpen)
-            closeTray();
-        else
-            openTray();
-    });
-
-    return button;
-}
-
-function createTableRowDesktop(rank: number, plane: PlaneObject) {
-    const summaryRow = $("<tr/>");
-
-    summaryRow.append($("<td/>", { text: rank }));
-    summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao.toUpperCase() }));
-    summaryRow.append($("<td/>", { text: plane.icaoType ?? "" }));
-    summaryRow.append($("<td/>", { text: plane.name ?? "" }));
-
-    const rows = [summaryRow];
-
-    rows.forEach((row) => {
-        row.on("click", () => {
-            selectPlaneByHex(plane.icao, {follow: true});
-        });
-    });
-
-    return rows;
-}
-
-function createTableRowMobile(rank: number, plane: PlaneObject) {
-    const summaryRow = $("<tr/>");
-
-    summaryRow.append($("<td/>", { text: rank }));
-    summaryRow.append($("<td/>", { text: plane.registration || "*" + plane.icao.toUpperCase() }));
-    summaryRow.append($("<td/>", { text: plane.icaoType ?? "" }));
-    summaryRow.append($("<td/>", { text: plane.name ?? "" }));
-
-    const opRow = $(`<tr><td colspan=4>${plane.ownOp}</td></tr>`);
-
-    const rows = [summaryRow, opRow];
-
-    rows.forEach((row) => {
-        row.on("click", () => {
-            closeTray();
-            selectPlaneByHex(plane.icao, {follow: true});
-        });
-    });
-
-    return rows;
-}
-
-function openTray() {
-    uiContainer.css("transform", "translateX(0)");
-    uiContainer.css("-webkit-transform", "translateX(0)");
-    trayOpen = true;
-}
-
-function closeTray() {
-    uiContainer.css("transform", "translateX(-100%)");
-    uiContainer.css("-webkit-transform", "translateX(-100%)");
-    trayOpen = false;
-}
+window.aircraftViews = new AircraftViews();
 
 class ViewedAircraft {
     plane: PlaneObject;

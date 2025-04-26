@@ -712,7 +712,7 @@ function initialize() {
     earlyInitPage();
     initMapEarly();
 
-    initAircraftViews();
+    window.aircraftViews.init();
 
     jQuery.when(configureReceiver, heatmapDefer).done(function() {
 
@@ -2606,8 +2606,6 @@ function ol_map_init() {
     });
 
     OLMap.on(['click', 'dblclick'], function(evt) {
-        eventTarget.dispatchEvent(new CustomEvent(eventTypes.mapClick, {detail: evt}));
-
         let trailHex = null;
         let trailTS = null;
         let planeHex = null;
@@ -2667,6 +2665,9 @@ function ol_map_init() {
             gotoTime(trailTS);
         }
         let hex = planeHex || trailHex;
+
+        eventTarget.dispatchEvent(new CustomEvent(eventTypes.mapClick, {detail: {event: evt, hex: hex}}));
+
         if (hex) {
             selectPlaneByHex(hex, {noDeselect: dblclick, follow: dblclick});
         }

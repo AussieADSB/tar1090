@@ -20,11 +20,16 @@ class AirspacesLayer {
         this.popupOverlay = new ol.Overlay({ element: this.popupContainer });
         OLMap.addOverlay(this.popupOverlay);
         eventTarget.addEventListener(eventTypes.mapClick, (event) => {
-            const mapEvent = event.detail;
+            const mapEvent = event.detail.event;
+            const selectedHex = event.detail.hex;
+            if (selectedHex) {
+                this.hideInfobox();
+                return;
+            }
             this.onAirspacesClick(mapEvent);
         });
         this.popupCloseButton.addEventListener('click', () => {
-            this.popupOverlay.setPosition(undefined);
+            this.hideInfobox();
             this.popupCloseButton.blur();
             return false;
         });
@@ -142,12 +147,16 @@ class AirspacesLayer {
             if (feature === undefined)
                 return;
             airspaces.push(feature);
+        }, {
+            layerFilter: (layer) => {
+                return layer.get("name").endsWith("airspaces");
+            }
         });
         if (airspaces.length) {
             this.showInfobox(event.coordinate, airspaces);
         }
-        else if (this.popupOverlay) {
-            this.popupOverlay.setPosition(undefined);
+        else {
+            this.hideInfobox();
         }
     }
     showInfobox(latLng, airspaces) {
@@ -262,6 +271,11 @@ class AirspacesLayer {
         content += "</table>";
         this.popupContent.innerHTML = content;
         this.popupOverlay.setPosition(latLng);
+    }
+    hideInfobox() {
+        if (this.popupOverlay) {
+            this.popupOverlay.setPosition(undefined);
+        }
     }
     createActivationRowInfobox(type, time, alt, statusType, first) {
         const atr = document.createElement("tr");
