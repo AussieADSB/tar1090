@@ -288,10 +288,7 @@ class AirspacesLayer {
                 const unknownT = document.createElement("div");
                 unknownT.className = "text-nowrap";
                 //Also add to airspaces.js RenderActivationsList
-                if (airspaces[i].get("hours").timeType === AussieADSB.Website.Models.Airspaces.TimesType.NOTAM) {
-                    unknownT.appendChild(document.createTextNode("NOTAM"));
-                }
-                else if (airspaces[i].get("hours").timeType === AussieADSB.Website.Models.Airspaces.TimesType.H24) {
+                if (airspaces[i].get("hours").timeType === AussieADSB.Website.Models.Airspaces.TimesType.H24) {
                     unknownStatus = AussieADSB.Website.Models.StatusType.Now;
                     unknownT.appendChild(document.createTextNode("24 hours"));
                 }
@@ -585,6 +582,36 @@ class AirspacesLayer {
         const time = (date.getHours() < 10 ? "0" : "") + date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
         if (onMobile) return date.getDate() + " " + time;
         return date.getDate() + "/" + (date.getMonth() + 1) + " " + time;
+    }
+
+    public getAirspacesWithoutStatus() {
+        let airspacesWithoutStatus: {id: string, name: string}[] = [];
+
+        layers.forEach(layer => {
+            if (layer.get("name") == "airspaces") {
+                (layer as ol.layer.Group).getLayers().forEach(layer => {
+                    if (layer.get("name") == "class_r_airspaces" || layer.get("name") == "class_q_airspaces") {
+                        (layer as ol.layer.Vector).getSource().forEachFeature((feature: ol.Feature) => {
+                            const id = feature.get("airspaceId") as string;
+
+                            if (feature.get("hours").timeType === AussieADSB.Website.Models.Airspaces.TimesType.NOTAM) {
+                                const airspace = this.getAirspaceById(id);
+
+                                if (airspace === undefined) {
+                                    const airspaceName = feature.get("name");
+                                    airspacesWithoutStatus.push({
+                                        id: id,
+                                        name: airspaceName
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        console.log(airspacesWithoutStatus);
     }
 }
 

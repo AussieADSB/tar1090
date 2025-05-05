@@ -252,10 +252,7 @@ class AirspacesLayer {
                 const unknownT = document.createElement("div");
                 unknownT.className = "text-nowrap";
                 //Also add to airspaces.js RenderActivationsList
-                if (airspaces[i].get("hours").timeType === 1 /* AussieADSB.Website.Models.Airspaces.TimesType.NOTAM */) {
-                    unknownT.appendChild(document.createTextNode("NOTAM"));
-                }
-                else if (airspaces[i].get("hours").timeType === 2 /* AussieADSB.Website.Models.Airspaces.TimesType.H24 */) {
+                if (airspaces[i].get("hours").timeType === 2 /* AussieADSB.Website.Models.Airspaces.TimesType.H24 */) {
                     unknownStatus = 7 /* AussieADSB.Website.Models.StatusType.Now */;
                     unknownT.appendChild(document.createTextNode("24 hours"));
                 }
@@ -527,6 +524,31 @@ class AirspacesLayer {
         if (onMobile)
             return date.getDate() + " " + time;
         return date.getDate() + "/" + (date.getMonth() + 1) + " " + time;
+    }
+    getAirspacesWithoutStatus() {
+        let airspacesWithoutStatus = [];
+        layers.forEach(layer => {
+            if (layer.get("name") == "airspaces") {
+                layer.getLayers().forEach(layer => {
+                    if (layer.get("name") == "class_r_airspaces" || layer.get("name") == "class_q_airspaces") {
+                        layer.getSource().forEachFeature((feature) => {
+                            const id = feature.get("airspaceId");
+                            if (feature.get("hours").timeType === 1 /* AussieADSB.Website.Models.Airspaces.TimesType.NOTAM */) {
+                                const airspace = this.getAirspaceById(id);
+                                if (airspace === undefined) {
+                                    const airspaceName = feature.get("name");
+                                    airspacesWithoutStatus.push({
+                                        id: id,
+                                        name: airspaceName
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        console.log(airspacesWithoutStatus);
     }
 }
 window.airspacesLayer = new AirspacesLayer();
