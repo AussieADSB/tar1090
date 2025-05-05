@@ -1,10 +1,15 @@
 images/sprites.png
+layers/airspaces.js
+aircraft-views.js
+airspaces-enums.js
 dbloader.js
 defaults.js
 early.js
+events.js
 flags.js
 formatter.js
 layers.js
+layers-manager.js
 markers.js
 planeObject.js
 registrations.js
