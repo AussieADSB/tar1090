@@ -3,14 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class AirspacesLayer {
     constructor() {
         this.airspaceStatus = {};
-        this.kmlLayerUrls = {
-            [AirspaceCategory.C]: "/layers/ClassCAirspaces_30NOV2023.kml",
-            [AirspaceCategory.D]: "/layers/ClassDAirspaces_30NOV2023.kml",
-            [AirspaceCategory.E]: "/layers/ClassEAirspaces_30NOV2023.kml",
+        this.layerUrls = {
+            [AirspaceCategory.C]: "/layers/ClassCAirspaces_28NOV2024.geojson",
+            [AirspaceCategory.D]: "/layers/ClassDAirspaces_28NOV2024.geojson",
+            [AirspaceCategory.E]: "/layers/ClassEAirspaces_28NOV2024.geojson",
             //UPDATE AIRSPACES PAGE airspaces.ts InitMap WITH NEW R/Q KML FILES
-            [AirspaceCategory.R]: "/layers/ClassRAirspaces_30NOV2023_MOAsRenamed.kml",
-            [AirspaceCategory.Q]: "/layers/ClassQAirspaces_30NOV2023.kml",
-            [AirspaceCategory.CTR]: "/layers/CTRAirspaces_30NOV2023.kml"
+            [AirspaceCategory.R]: "/layers/ClassRAirspaces_28NOV2024.geojson",
+            [AirspaceCategory.Q]: "/layers/ClassQAirspaces_28NOV2024.geojson",
+            [AirspaceCategory.CTR]: "/layers/CTRAirspaces_28NOV2024.geojson"
         };
     }
     mapInit() {
@@ -106,8 +106,8 @@ class AirspacesLayer {
     addKMLLayer(layerId, name, title) {
         const layer = new ol.layer.Vector({
             source: new ol.source.Vector({
-                url: this.kmlLayerUrls[layerId],
-                format: new ol.format.KML()
+                url: this.layerUrls[layerId],
+                format: new ol.format.GeoJSON()
             }),
             // @ts-ignore
             type: 'overlay',
@@ -118,7 +118,7 @@ class AirspacesLayer {
             zIndex: 99
         });
         layer.getSource().on('featuresloadend', () => {
-            this.parseExtendedData(layer);
+            this.parseProperties(layer);
             //Style polygons
             switch (layerId) {
                 case AirspaceCategory.C:
@@ -172,7 +172,7 @@ class AirspacesLayer {
                         const group = this.airspaceStatus[oKey][gKey];
                         for (const aspKey in group.airspaces) {
                             const airspace = group.airspaces[aspKey];
-                            if (airspaces[i].get("id") === airspace.identifier) {
+                            if (airspaces[i].get("airspaceId") === airspace.identifier) {
                                 matchFound = true;
                                 let airspaceContent = `<tr><td colspan='4'>${airspace.identifier} (${group.name})</td></tr>`;
                                 let minAlt = 99999;
@@ -184,7 +184,8 @@ class AirspacesLayer {
                                     if (actStatus < 2 /* AussieADSB.Website.Models.StatusType.Future */)
                                         continue;
                                     activationCount++;
-                                    const alt = this.altBlockToElement(activation.altitudeBlock, true);
+                                    const { floor, ceiling } = this.formatActivationAltitude(activation.altitudeBlock);
+                                    let alt = this.createAltitudeElement(floor, ceiling, true);
                                     if (activation.altitudeBlock.floorType === 2 /* AussieADSB.Website.Models.AltType.SFC */)
                                         minAlt = 0;
                                     else if (activation.altitudeBlock.floor && activation.altitudeBlock.floor < minAlt)
@@ -218,9 +219,13 @@ class AirspacesLayer {
                                     if (airspace.hours.timeType === 2 /* AussieADSB.Website.Models.Airspaces.TimesType.H24 */) {
                                         status = 7 /* AussieADSB.Website.Models.StatusType.Now */;
                                         type = ActivationType.Activation;
-                                        t.appendChild(document.createTextNode("24 Hours"));
+                                        t.appendChild(document.createTextNode("24 hours"));
                                     }
-                                    let alt = this.altBlockToElement(airspace.altitudeBlock, true);
+                                    if (airspace.hours.timeType === 1 /* AussieADSB.Website.Models.Airspaces.TimesType.NOTAM */) {
+                                        t.appendChild(document.createTextNode("NOTAM"));
+                                    }
+                                    const { floor, ceiling } = this.formatActivationAltitude(airspace.altitudeBlock);
+                                    let alt = this.createAltitudeElement(floor, ceiling, true);
                                     if (airspace.altitudeBlock.floorType === 2 /* AussieADSB.Website.Models.AltType.SFC */)
                                         minAlt = 0;
                                     else if (airspace.altitudeBlock.floor && airspace.altitudeBlock.floor < minAlt)
@@ -240,13 +245,8 @@ class AirspacesLayer {
                 }
             }
             if (!matchFound) {
-                let unknownAirspaceContent = `<tr><td colspan='4'>${airspaces[i].get("name")}</td></tr>`;
-                let unknownFloor = airspaces[i].get("altitudeBlock").floor;
-                let unknownCeiling = airspaces[i].get("altitudeBlock").ceiling;
-                if (!Number.isInteger(unknownFloor))
-                    unknownFloor = 0;
-                if (!Number.isInteger(unknownCeiling))
-                    unknownCeiling = 99999;
+                let featureAirspaceContent = `<tr><td colspan='4'>${airspaces[i].get("name")}</td></tr>`;
+                const { numericFloor, numericCeiling } = this.numericFeatureAltitude(airspaces[i]);
                 let unknownStatus = 3 /* AussieADSB.Website.Models.StatusType.Unknown */;
                 const unknownType = ActivationType.Activation;
                 const unknownT = document.createElement("div");
@@ -257,11 +257,12 @@ class AirspacesLayer {
                 }
                 else if (airspaces[i].get("hours").timeType === 2 /* AussieADSB.Website.Models.Airspaces.TimesType.H24 */) {
                     unknownStatus = 7 /* AussieADSB.Website.Models.StatusType.Now */;
-                    unknownT.appendChild(document.createTextNode("24 Hours"));
+                    unknownT.appendChild(document.createTextNode("24 hours"));
                 }
-                let alt = this.altBlockToElement(airspaces[i].get("altitudeBlock"), true);
-                unknownAirspaceContent += this.createActivationRowInfobox(unknownType, unknownT, alt, unknownStatus, false).outerHTML;
-                airspaceRows.push([unknownFloor, unknownCeiling, unknownAirspaceContent]);
+                const { floor, ceiling } = this.formatFeatureAltitude(airspaces[i]);
+                let altElement = this.createAltitudeElement(floor, ceiling, true);
+                featureAirspaceContent += this.createActivationRowInfobox(unknownType, unknownT, altElement, unknownStatus, false).outerHTML;
+                airspaceRows.push([numericFloor, numericCeiling, featureAirspaceContent]);
             }
         }
         airspaceRows.sort((a, b) => (a[1] < b[1]) ? 1 : ((b[1] < a[1]) ? -1 : 0)); //Sort by max alt
@@ -303,9 +304,22 @@ class AirspacesLayer {
         atr.appendChild(gtd4);
         return atr;
     }
-    altBlockToElement(altBlock, oneLine) {
-        const floor = this.altToString(altBlock.floorType, altBlock.floor);
-        const ceiling = this.altToString(altBlock.ceilingType, altBlock.ceiling);
+    formatActivationAltitude(altBlock) {
+        const floor = this.activationAltToString(altBlock.floorType, altBlock.floor);
+        const ceiling = this.activationAltToString(altBlock.ceilingType, altBlock.ceiling);
+        return { floor, ceiling };
+    }
+    formatFeatureAltitude(feature) {
+        const floor = this.featureAltToString(feature.get("lowerCeiling").unit, feature.get("lowerCeiling").value);
+        const ceiling = this.featureAltToString(feature.get("upperCeiling").unit, feature.get("upperCeiling").value);
+        return { floor, ceiling };
+    }
+    numericFeatureAltitude(feature) {
+        let numericFloor = this.featureAltToNumber(feature.get("lowerCeiling").unit, feature.get("lowerCeiling").value, 1);
+        let numericCeiling = this.featureAltToNumber(feature.get("upperCeiling").unit, feature.get("upperCeiling").value, 59999);
+        return { numericFloor, numericCeiling };
+    }
+    createAltitudeElement(floor, ceiling, oneLine) {
         const alt = document.createElement("div");
         if (oneLine) {
             alt.className = "text-nowrap";
@@ -322,7 +336,7 @@ class AirspacesLayer {
         }
         return alt;
     }
-    parseExtendedData(kmlLayer) {
+    parseProperties(kmlLayer) {
         kmlLayer.getSource().forEachFeature((feature) => {
             const featureName = feature.get("name");
             const bracketIndex = featureName.indexOf("[");
@@ -345,68 +359,7 @@ class AirspacesLayer {
                     hoursType = 4 /* AussieADSB.Website.Models.Airspaces.TimesType.Unknown */;
                     break;
             }
-            let floor, ceiling;
-            let floorType = 5 /* AussieADSB.Website.Models.AltType.Unknown */;
-            let ceilingType = 5 /* AussieADSB.Website.Models.AltType.Unknown */;
-            const kmlFloor = feature.get("FLOOR");
-            if (kmlFloor === "SFC") {
-                floorType = 2 /* AussieADSB.Website.Models.AltType.SFC */;
-                floor = undefined;
-            }
-            else if (kmlFloor === "NOTAM") {
-                floorType = 1 /* AussieADSB.Website.Models.AltType.NOTAM */;
-                floor = undefined;
-            }
-            else if (kmlFloor.endsWith("FT")) {
-                floorType = 0 /* AussieADSB.Website.Models.AltType.Specific */;
-                floor = parseInt(kmlFloor.substring(0, kmlFloor.length - 2));
-            }
-            else if (kmlFloor.startsWith("FL")) {
-                floorType = 0 /* AussieADSB.Website.Models.AltType.Specific */;
-                floor = parseInt(kmlFloor.substring(2)) * 100;
-            }
-            else if (kmlFloor.endsWith(" AGL")) {
-                floorType = 0 /* AussieADSB.Website.Models.AltType.Specific */;
-                floor = parseInt(kmlFloor.substring(0, kmlFloor.length - " AGL".length));
-            }
-            else {
-                console.error("kml alt parsing error", kmlFloor);
-            }
-            const kmlCeiling = feature.get("CEILING");
-            if (kmlCeiling === "NOTAM") {
-                ceilingType = 1 /* AussieADSB.Website.Models.AltType.NOTAM */;
-                ceiling = undefined;
-            }
-            else if (kmlCeiling === "UNL") {
-                ceilingType = 4 /* AussieADSB.Website.Models.AltType.UNL */;
-                ceiling = undefined;
-            }
-            else if (kmlCeiling === "BCTA") {
-                ceilingType = 3 /* AussieADSB.Website.Models.AltType.BCTA */;
-                ceiling = undefined;
-            }
-            else if (kmlCeiling.endsWith("FT")) {
-                ceilingType = 0 /* AussieADSB.Website.Models.AltType.Specific */;
-                ceiling = parseInt(kmlCeiling.substring(0, kmlCeiling.length - 2));
-            }
-            else if (kmlCeiling.startsWith("FL")) {
-                ceilingType = 0 /* AussieADSB.Website.Models.AltType.Specific */;
-                ceiling = parseInt(kmlCeiling.substring(2)) * 100;
-            }
-            else if (kmlCeiling.endsWith(" AGL")) {
-                ceilingType = 0 /* AussieADSB.Website.Models.AltType.Specific */;
-                ceiling = parseInt(kmlCeiling.substring(0, kmlCeiling.length - " AGL".length));
-            }
-            else {
-                console.error("kml alt parsing error", kmlCeiling);
-            }
             feature.set("hours", { timeType: hoursType });
-            feature.set("altitudeBlock", {
-                floor: floor,
-                floorType: floorType,
-                ceiling: ceiling,
-                ceilingType: ceilingType
-            });
         });
     }
     styleLayersFillColour(layer, colour) {
@@ -429,10 +382,10 @@ class AirspacesLayer {
             console.warn("Can't style airspace layer, layers or airspaceStatus undefined");
         }
         layer.getSource().forEachFeature((feature) => {
-            if (feature.get("id") === undefined) {
-                feature.set("id", this.getAirspaceId(feature.get("name"), true));
+            if (feature.get("airspaceId") === undefined) {
+                feature.set("airspaceId", this.getAirspaceId(feature.get("name"), true));
             }
-            const id = feature.get("id");
+            const id = feature.get("airspaceId");
             const airspace = this.getAirspaceById(id);
             //Get status
             let status = 3 /* AussieADSB.Website.Models.StatusType.Unknown */;
@@ -483,7 +436,7 @@ class AirspacesLayer {
             case 3 /* AussieADSB.Website.Models.Airspaces.TimesModifiers.JF */: return "Sat/Sun";
         }
     }
-    altToString(type, value) {
+    activationAltToString(type, value) {
         if (type === 0 /* AussieADSB.Website.Models.AltType.Specific */ && value !== undefined)
             return value.toString() + "ft";
         else if (type === 1 /* AussieADSB.Website.Models.AltType.NOTAM */)
@@ -496,6 +449,36 @@ class AirspacesLayer {
             return "UNL";
         else
             return "Unknown";
+    }
+    featureAltToString(unit, value) {
+        if (value === "NOTAM")
+            return "NOTAM";
+        else if (value === "BCTA")
+            return "BCTA";
+        else if (unit === "FT" && value === 0)
+            return "SFC";
+        else if (unit === "FT" && value !== undefined)
+            return value.toString() + "ft";
+        else if (unit === "FL" && value === 999)
+            return "UNL";
+        else if (unit === "FL" && value !== undefined)
+            return (+value * 100).toString() + "ft";
+        else
+            return "Unknown";
+    }
+    featureAltToNumber(unit, value, defaultValue) {
+        if (value === "NOTAM")
+            return defaultValue;
+        else if (value === "BCTA")
+            return defaultValue;
+        else if (unit === "FT" && value !== undefined)
+            return +value;
+        else if (unit === "FL" && value === 999)
+            return 60000;
+        else if (unit === "FL" && value !== undefined)
+            return (+value * 100);
+        else
+            return defaultValue;
     }
     getAirspaceStatusType(airspace) {
         let type = 1 /* AussieADSB.Website.Models.StatusType.Inactive */;
