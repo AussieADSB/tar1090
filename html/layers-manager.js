@@ -10,6 +10,9 @@ class LayersManager {
      */
     addCustomLayers() {
         window.airspacesLayer.addLayers();
+        // @ts-ignore
+        layers.push(new ol.layer.Group({ name: 'airports', title: 'Airports' }));
+        window.taxiwayMarkersLayer.addLayers();
         // Reverse the order of the layers so newer layers are at the bottom of the layer switcher
         layers.getArray().reverse();
     }
