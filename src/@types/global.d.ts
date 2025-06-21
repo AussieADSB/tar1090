@@ -37,4 +37,5 @@ interface Window {
     aircraftViews: AircraftViews;
     airspacesLayer: AirspacesLayer;
     taxiwayMarkersLayer: TaxiwayMarkersLayer;
+    gateMarkersLayer: GateMarkersLayer;
 }

@@ -1,6 +1,7 @@
 images/sprites.png
 layers/airspaces.js
 layers/taxiway-markers.js
+layers/gate-markers.js
 aircraft-views.js
 airspaces-enums.js
 dbloader.js
