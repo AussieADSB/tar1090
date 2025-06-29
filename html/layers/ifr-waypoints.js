@@ -16,7 +16,7 @@ class IfrWaypointsLayer {
                 title: 'IFR Waypoints',
                 type: 'overlay',
                 zIndex: 98,
-                visible: true,
+                visible: false,
                 style: function (feature) {
                     return new ol.style.Style({
                         image: new ol.style.Icon({
