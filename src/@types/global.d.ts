@@ -38,4 +38,6 @@ interface Window {
     airspacesLayer: AirspacesLayer;
     taxiwayMarkersLayer: TaxiwayMarkersLayer;
     gateMarkersLayer: GateMarkersLayer;
+    ifrWaypointsLayer: IFRWaypointsLayer;
+    vfrWaypointsLayer: VFRWaypointsLayer;
 }
