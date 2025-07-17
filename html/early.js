@@ -599,7 +599,7 @@ if (uuid != null) {
 
 function get_history() {
     if (!loadFinished) {
-        if (!globeIndex && !uuid) {
+        if (!globeIndex && !uuid && !aggregator) {
             let request = jQuery.ajax({ url: 'upintheair.json',
                 cache: true,
                 dataType: 'json' });
