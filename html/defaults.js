@@ -270,7 +270,7 @@ let globalScale = 1;
 let userScale = 1;
 let iconScale = 1;
 
-let enableLabelsDefaultState = false;
+let enableLabelsDefaultState = true;
 
 let displayUATasADSB = false;
 let uatNoTISB = false;
