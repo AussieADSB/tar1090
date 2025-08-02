@@ -24,6 +24,8 @@ declare class PlaneObject {
     name: string;
     icaoType: string;
     ownOp: string;
+    military: boolean;
+    interesting: number;
     position: number[];
     tr: Element;
 }

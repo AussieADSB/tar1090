@@ -3,11 +3,28 @@ class AircraftViews {
     private mostViewed: ViewedAircraft[] = [];
     private pollIntervalMs = 10000;
     private maxCount = 10;
+    private aircraftSelectCount = 0;
 
     public async init() {
         eventTarget.addEventListener(eventTypes.aircraftSelected, async () => {
-            if (SelectedPlane && !this.selectedAircraft.includes(SelectedPlane.icao))
+            if (SelectedPlane && !this.selectedAircraft.includes(SelectedPlane.icao)) {
                 this.selectedAircraft.push(SelectedPlane.icao);
+
+                this.aircraftSelectCount++;
+
+                if (gtag) {
+                    gtag("event", "aircraft_select", {
+                        'icao': SelectedPlane.icao,
+                        'registration': SelectedPlane.registration,
+                        'callsign': SelectedPlane.name,
+                        'type': SelectedPlane.icaoType,
+                        'ownOp': SelectedPlane.ownOp,
+                        'military': SelectedPlane.military,
+                        'interesting': SelectedPlane.interesting,
+                        'selectCount': this.aircraftSelectCount
+                    });
+                }
+            }
         });
 
         const fetchDoneHandler = async () => {

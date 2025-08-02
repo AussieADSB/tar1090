@@ -14,12 +14,27 @@ class AircraftViews {
         this.mostViewed = [];
         this.pollIntervalMs = 10000;
         this.maxCount = 10;
+        this.aircraftSelectCount = 0;
     }
     init() {
         return __awaiter(this, void 0, void 0, function* () {
             eventTarget.addEventListener(eventTypes.aircraftSelected, () => __awaiter(this, void 0, void 0, function* () {
-                if (SelectedPlane && !this.selectedAircraft.includes(SelectedPlane.icao))
+                if (SelectedPlane && !this.selectedAircraft.includes(SelectedPlane.icao)) {
                     this.selectedAircraft.push(SelectedPlane.icao);
+                    this.aircraftSelectCount++;
+                    if (gtag) {
+                        gtag("event", "aircraft_select", {
+                            'icao': SelectedPlane.icao,
+                            'registration': SelectedPlane.registration,
+                            'callsign': SelectedPlane.name,
+                            'type': SelectedPlane.icaoType,
+                            'ownOp': SelectedPlane.ownOp,
+                            'military': SelectedPlane.military,
+                            'interesting': SelectedPlane.interesting,
+                            'selectCount': this.aircraftSelectCount
+                        });
+                    }
+                }
             }));
             const fetchDoneHandler = () => __awaiter(this, void 0, void 0, function* () {
                 eventTarget.removeEventListener(eventTypes.fetchDone, fetchDoneHandler);
