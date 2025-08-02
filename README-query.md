@@ -50,10 +50,12 @@ See the main readme for more examples on how to use the filters
 - mapDim=0.1-1.0 - reduce map brightness (negative values increase brightness)
 - mapContrast=0.1-1.0 - increase the map contrast (negative values decrease brightness)
 - filterMaxRange=value - maximum distance of rendered tracks.
-- baseMap=maptype - change the map type (as defined in config.js).
+- baseMap=maptype - change the map type (as defined in config.js / layers.js)
+- overlays=o1,o2 - add overlay layers separated with comma (see config.js / layers.js)
 - mapOrientation=0-360 - normally true north faces up, use this to change which true direction is pointing up.
 - monochromeMarkers=xxxxxx - set constant html color for markers (parameter is an hexadecimal color).
 - monochromeTracks=xxxxxx - set constant html color for tracks (parameter is an hexadecimal color).
+- atcStyle - use a style somewhat like an ATC display
 - outlineWidth=value - set width for the for aircraft icons (only works with webGL disabled)
 - outlineColor=xxxxxx - set outline color (parameter is an hexadecimal color, only works with webGL disabled)
 - sidebarWidth=xxx - size of sidebar in pixels.

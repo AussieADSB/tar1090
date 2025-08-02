@@ -239,8 +239,14 @@ MapboxAPIKey = null;
 //labelZoom = 8;
 labelZoomGround = 12.5;
 
-labelFont = 'bold 10px tahoma';
-enableLabelsDefaultState = true;
+// font family for labels, default bold, could be empty or italic as well
+// labelStyle = 'bold';
+// labelFamily = 'Tahoma, Verdana, Helvetica, sans-serif';
+// labelScale = 1;
+
+// globalScale = 1;
+// userScale = 1;
+// iconScale = 1;
 
 //displayUATasADSB = false;
 //uatNoTISB = true;
@@ -323,10 +329,13 @@ HideCols = [
 // get pictures from planespotting.be
 // planespottingAPI = true;
 
-// get flight route from routeApi service
-useRouteAPI = true;
+// get flight route from routeApi service default setting (toggle via settings checkbox)
+ useRouteAPI = true;
+// useIataAirportCodes = true; // use ICAO when false
 // which routeApi service to use
+// routeApiUrl = "https://adsb.im/api/0/routeset";
 routeApiUrl = "https://api.adsb.lol/api/0/routeset";
+// routeApiUrl = ""; // to disable route API so it can't be enabled by a website visitor
 
 // show a link to jetphotos, only works if planespottersAPI is disabled
 // jetphotoLinks = false;
@@ -365,6 +374,7 @@ enableDWD = false;
 //
 //
 //jaeroTimeout = 35 * 60; // in seconds
+//jaeroLabel = "ADS-C"; // relabel the ADS-C data if used for other purposes (i.e. HFDL / acars2pos)
 
 //seenTimeout = 58; // in seconds
 //seenTimeoutMlat = 58; // in seconds
@@ -376,7 +386,6 @@ enableDWD = false;
 
 // aiscatcher_server = "http://192.168.1.113:8100"; // update with your server address
 // aiscatcher_refresh = 15; // refresh interval in seconds
-// aiscatcher_test = true; // show with squares on the aircraft icon layer
 // aisTimeout = 1200;
 
 // droneJson = "";
