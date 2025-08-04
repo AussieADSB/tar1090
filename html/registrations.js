@@ -13,6 +13,7 @@ const registration_from_hexid = (function () {
 
     let limited_alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ"; // 24 chars; no I, O
     let full_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";  // 26 chars
+    let full_alphanumeric_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // 36 chars
 
     // handles 3-letter suffixes assigned with a regular pattern
     //
@@ -59,6 +60,7 @@ const registration_from_hexid = (function () {
         { start: 0x760421, s1: 1024,  s2: 32, prefix: "AP-" },
         { start: 0x768421, s1: 1024,  s2: 32, prefix: "9V-" },
         { start: 0x778421, s1: 1024,  s2: 32, prefix: "YK-" },
+        { start: 0x7C0000, s1: 36*36, s2: 36, prefix: "VH-", first: 'AAA', last: '999', alphabet: full_alphanumeric_alphabet },
         { start: 0xC00001, s1: 26*26, s2: 26, prefix: "C-F" },
         { start: 0xC044A9, s1: 26*26, s2: 26, prefix: "C-G" },
         { start: 0xE01041, s1: 4096,  s2: 64, prefix: "LV-" }
