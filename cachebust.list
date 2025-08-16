@@ -5,6 +5,7 @@ layers/gate-markers.js
 layers/ifr-waypoints.js
 layers/vfr-waypoints.js
 aircraft-views.js
+dboverrideloader.js
 airspaces-enums.js
 dbloader.js
 defaults.js

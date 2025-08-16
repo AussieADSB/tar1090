@@ -37,6 +37,7 @@ declare namespace ol {
 interface Window {
     layersManager: LayersManager;
     aircraftViews: AircraftViews;
+    dbOverrides: DbOverrideloader;
     airspacesLayer: AirspacesLayer;
     taxiwayMarkersLayer: TaxiwayMarkersLayer;
     gateMarkersLayer: GateMarkersLayer;

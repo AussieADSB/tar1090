@@ -44,6 +44,7 @@ function PlaneObject(icao) {
     this.wtc = null;
 
     this.dbinfoLoaded = false;
+    this.dbOverrideInfoLoaded = false;
     // request metadata
     this.checkForDB();
 
@@ -2469,6 +2470,70 @@ PlaneObject.prototype.getAircraftData = function() {
         });
 };
 
+PlaneObject.prototype.getAircraftDataOverrides = function() {
+    if (this.dbOverrideLoading) {
+        return;
+    }
+    this.dbOverrideLoading = true;
+
+    let req = window.dbOverrides.dbLoad(this.icao);
+
+    req.then(
+        data => {
+            if (this.dbOverrideInfoLoaded)
+                return;
+            this.dbOverrideInfoLoaded = true;
+            delete this.dbOverrideLoading;
+            if (data == null) {
+                return;
+            }
+            if (data == "strange") {
+                return;
+            }
+
+            if (data[0]) {
+                this.registration = `${data[0]}`;
+            }
+
+            if (data[1]) {
+                this.icaoType = `${data[1]}`;
+                this.setTypeData();
+            }
+
+            if (data[2] !== undefined && data[2] != '') {
+                this.military = (data[2][0] === '1');
+                this.interesting = (data[2][1] === '1');
+                this.pia = (data[2][2] == '1');
+                this.ladd = (data[2][3] == '1');
+                if (this.pia)
+                    this.registration = null;
+            }
+
+            if (data[3]) {
+                this.typeLong = `${data[3]}`;
+            }
+
+            if (data[4]) {
+                this.ownOp = `${data[4]}`;
+            }
+
+            this.dataChanged();
+
+            data = null;
+        },
+        e => {
+            delete this.dbOverrideLoading;
+            if (e.http_status == 'timeout') {
+                this.getAircraftDataOverrides();
+            } else if (e.http_status == 'other') {
+                this.dbOverrideInfoLoaded = true;
+            } else {
+                console.log(this.icao + ': Unrecognized Database load error: ' + e);
+                this.dbOverrideInfoLoaded = true;
+            }
+        });
+};
+
 PlaneObject.prototype.reapTrail = function() {
     const oldSegs = this.track_linesegs;
     this.track_linesegs = [];
@@ -2850,6 +2915,9 @@ PlaneObject.prototype.setTypeData = function() {
 };
 
 PlaneObject.prototype.setTypeFlagsReg = function(data) {
+    if (this.dbOverrideInfoLoaded)
+        return;
+
     if (data.t && data.t != this.icaoType) {
         this.icaoType = `${data.t}`;
         this.setTypeData();
@@ -2870,8 +2938,7 @@ PlaneObject.prototype.checkForDB = function(data) {
         this.icaoType = 'P8 ?';
         this.setTypeData();
     }
-    if (data) {
-
+    if (data && !this.dbOverrideInfoLoaded) {
         if (data.desc) this.typeLong = `${data.desc}`;
         if (data.ownOp) this.ownOp = `${data.ownOp}`;
         if (data.year) this.year = `${data.year}`;
@@ -2882,10 +2949,15 @@ PlaneObject.prototype.checkForDB = function(data) {
             this.dbinfoLoaded = true;
         }
     }
-    if (!this.dbinfoLoaded && (!dbServer || replay || pTracks || heatmap)) {
+
+    if (!this.dbinfoLoaded && !this.dbOverrideInfoLoaded && (!dbServer || replay || pTracks || heatmap)) {
         this.getAircraftData();
-        return;
     }
+
+    if (!this.dbOverrideInfoLoaded) {
+        this.getAircraftDataOverrides();
+    }
+
     this.dataChanged();
 };
 PlaneObject.prototype.updateAlt = function(t) {
