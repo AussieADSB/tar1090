@@ -45,6 +45,7 @@ function PlaneObject(icao) {
 
     this.dbinfoLoaded = false;
     this.dbOverrideInfoLoaded = false;
+    this.dbOverrideInfoApplied = false;
     // request metadata
     this.checkForDB();
 
@@ -2517,6 +2518,8 @@ PlaneObject.prototype.getAircraftDataOverrides = function() {
                 this.ownOp = `${data[4]}`;
             }
 
+            this.dbOverrideInfoApplied = true;
+
             this.dataChanged();
 
             data = null;
@@ -2915,7 +2918,7 @@ PlaneObject.prototype.setTypeData = function() {
 };
 
 PlaneObject.prototype.setTypeFlagsReg = function(data) {
-    if (this.dbOverrideInfoLoaded)
+    if (this.dbOverrideInfoApplied)
         return;
 
     if (data.t && data.t != this.icaoType) {
@@ -2938,7 +2941,7 @@ PlaneObject.prototype.checkForDB = function(data) {
         this.icaoType = 'P8 ?';
         this.setTypeData();
     }
-    if (data && !this.dbOverrideInfoLoaded) {
+    if (data && !this.dbOverrideInfoApplied) {
         if (data.desc) this.typeLong = `${data.desc}`;
         if (data.ownOp) this.ownOp = `${data.ownOp}`;
         if (data.year) this.year = `${data.year}`;
@@ -2950,7 +2953,7 @@ PlaneObject.prototype.checkForDB = function(data) {
         }
     }
 
-    if (!this.dbinfoLoaded && !this.dbOverrideInfoLoaded && (!dbServer || replay || pTracks || heatmap)) {
+    if (!this.dbinfoLoaded && !this.dbOverrideInfoApplied && (!dbServer || replay || pTracks || heatmap)) {
         this.getAircraftData();
     }
 
