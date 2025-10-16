@@ -2712,6 +2712,8 @@ function ol_map_init() {
         } else if (trailHex) {
             eventTarget.dispatchEvent(new CustomEvent(eventTypes.mapClick, {detail: {event: evt, hex: trailHex}}));
             selectPlaneByHex(trailHex, {noDeselect: true});
+        } else {
+            eventTarget.dispatchEvent(new CustomEvent(eventTypes.mapClick, {detail: {event: evt}}));
         }
 
         if (!planeHex && !trailHex && !multiSelect && !showTrace) {
