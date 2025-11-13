@@ -365,7 +365,7 @@ enableDWD = false;
 //
 //hideButtons = false;
 //
-//askLocation = false;  // requires https for geolocation (browsers require it)
+askLocation = true;  // requires https for geolocation (browsers require it)
 //
 //filterMaxRange = 50; // don't show aircraft further than 50 nmi from the receiver
 //
