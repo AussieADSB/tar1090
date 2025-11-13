@@ -2518,6 +2518,10 @@ PlaneObject.prototype.getAircraftDataOverrides = function() {
                 this.ownOp = `${data[4]}`;
             }
 
+            if (data[5]) {
+                this.year = `${data[5]}`;
+            }
+
             this.dbOverrideInfoApplied = true;
 
             this.dataChanged();
