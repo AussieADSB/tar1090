@@ -83,7 +83,7 @@ MapType_tar1090 = "carto_light_all";
 
 // Default map dim state, true or false.
 // MapDim = true;
-mapDimPercentage = 0.3;
+mapDimPercentage = 0.4;
 // mapContrastPercentage = 0;
 
 // opacities for various overlays
