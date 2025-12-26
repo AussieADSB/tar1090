@@ -4,13 +4,12 @@ class AirspacesLayer {
     private airspaceStatus: { [p: string]: AussieADSB.Website.Models.Airspaces.AirspaceGroup<AussieADSB.Website.Models.Airspaces.Airspace>[] } = {};
 
     private layerUrls: { [TKey in AirspaceCategory]: string } = {
-        [AirspaceCategory.C]: "/layers/ClassCAirspaces_28NOV2024.geojson",
-        [AirspaceCategory.D]: "/layers/ClassDAirspaces_28NOV2024.geojson",
-        [AirspaceCategory.E]: "/layers/ClassEAirspaces_28NOV2024.geojson",
-        //UPDATE AIRSPACES PAGE airspaces.ts InitMap WITH NEW R/Q KML FILES
-        [AirspaceCategory.R]: "/layers/ClassRAirspaces_28NOV2024.geojson",
-        [AirspaceCategory.Q]: "/layers/ClassQAirspaces_28NOV2024.geojson",
-        [AirspaceCategory.CTR]: "/layers/CTRAirspaces_28NOV2024.geojson"
+        [AirspaceCategory.C]: "/layers/ClassCAirspaces_27NOV2025.geojson",
+        [AirspaceCategory.D]: "/layers/ClassDAirspaces_27NOV2025.geojson",
+        [AirspaceCategory.E]: "/layers/ClassEAirspaces_27NOV2025.geojson",
+        [AirspaceCategory.R]: "/layers/ClassRAirspaces_27NOV2025.geojson",
+        [AirspaceCategory.Q]: "/layers/ClassQAirspaces_27NOV2025.geojson",
+        [AirspaceCategory.CTR]: "/layers/CTRAirspaces_27NOV2025.geojson"
     }
 
     private popupContainer: HTMLElement | undefined;
