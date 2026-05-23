@@ -681,10 +681,10 @@ function createBaseLayers() {
         g.refreshRainviewerRadar = async function() {
             const latestLayer = await g.getRainviewerLayers('radar');
             const rainviewerRadarSource = new ol.source.XYZ({
-                url: 'https://tilecache.rainviewer.com/v2/radar/' + latestLayer.past[latestLayer.past.length - 1].time + '/512/{z}/{x}/{y}/6/1_1.png',
+                url: 'https://tilecache.rainviewer.com' + latestLayer.past[latestLayer.past.length - 1].path + '/512/{z}/{x}/{y}/2/1_1.png',
                 attributions: '<a href="https://www.rainviewer.com/api.html" target="_blank">RainViewer.com</a>',
                 attributionsCollapsible: false,
-                maxZoom: 20,
+                maxZoom: 7,
             });
             rainviewerRadar.setSource(rainviewerRadarSource);
         };
@@ -703,35 +703,35 @@ function createBaseLayers() {
 
 
 
-        const rainviewerClouds = new ol.layer.Tile({
-            name: 'rainviewer_clouds',
-            title: 'RainViewer Clouds',
-            type: 'overlay',
-            opacity: rainViewerCloudsOpacity,
-            visible: false,
-            zIndex: 99,
-        });
-        g.refreshRainviewerClouds = async function() {
-            const latestLayer = await g.getRainviewerLayers('satellite');
-            const rainviewerCloudsSource = new ol.source.XYZ({
-                url: 'https://tilecache.rainviewer.com/' + latestLayer.infrared[latestLayer.infrared.length - 1].path + '/512/{z}/{x}/{y}/0/0_0.png',
-                attributions: '<a href="https://www.rainviewer.com/api.html" target="_blank">RainViewer.com</a>',
-                attributionsCollapsible: false,
-                maxZoom: 20,
-            });
-            rainviewerClouds.setSource(rainviewerCloudsSource);
-        };
-
-        rainviewerClouds.on('change:visible', function(evt) {
-            if (evt.target.getVisible()) {
-                g.refreshRainviewerClouds();
-                g.refreshRainviewerCloudsInterval = window.setInterval(g.refreshRainviewerClouds, 2 * 60 * 1000);
-            } else {
-                clearInterval(g.refreshRainviewerCloudsInterval);
-            }
-        });
-
-        weather.push(rainviewerClouds);
+        // const rainviewerClouds = new ol.layer.Tile({
+        //     name: 'rainviewer_clouds',
+        //     title: 'RainViewer Clouds',
+        //     type: 'overlay',
+        //     opacity: rainViewerCloudsOpacity,
+        //     visible: false,
+        //     zIndex: 99,
+        // });
+        // g.refreshRainviewerClouds = async function() {
+        //     const latestLayer = await g.getRainviewerLayers('satellite');
+        //     const rainviewerCloudsSource = new ol.source.XYZ({
+        //         url: 'https://tilecache.rainviewer.com/' + latestLayer.infrared[latestLayer.infrared.length - 1].path + '/512/{z}/{x}/{y}/0/0_0.png',
+        //         attributions: '<a href="https://www.rainviewer.com/api.html" target="_blank">RainViewer.com</a>',
+        //         attributionsCollapsible: false,
+        //         maxZoom: 20,
+        //     });
+        //     rainviewerClouds.setSource(rainviewerCloudsSource);
+        // };
+        //
+        // rainviewerClouds.on('change:visible', function(evt) {
+        //     if (evt.target.getVisible()) {
+        //         g.refreshRainviewerClouds();
+        //         g.refreshRainviewerCloudsInterval = window.setInterval(g.refreshRainviewerClouds, 2 * 60 * 1000);
+        //     } else {
+        //         clearInterval(g.refreshRainviewerCloudsInterval);
+        //     }
+        // });
+        //
+        // weather.push(rainviewerClouds);
     }
 
     let createGeoJsonLayer = function (title, name, url, fill, stroke, showLabel = true) {
