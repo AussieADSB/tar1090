@@ -4,12 +4,12 @@ class AirspacesLayer {
     constructor() {
         this.airspaceStatus = {};
         this.layerUrls = {
-            [AirspaceCategory.C]: "/layers/ClassCAirspaces_27NOV2025.geojson",
-            [AirspaceCategory.D]: "/layers/ClassDAirspaces_27NOV2025.geojson",
-            [AirspaceCategory.E]: "/layers/ClassEAirspaces_27NOV2025.geojson",
-            [AirspaceCategory.R]: "/layers/ClassRAirspaces_27NOV2025.geojson",
-            [AirspaceCategory.Q]: "/layers/ClassQAirspaces_27NOV2025.geojson",
-            [AirspaceCategory.CTR]: "/layers/CTRAirspaces_27NOV2025.geojson"
+            [AirspaceCategory.C]: "/layers/ClassCAirspaces_09JUL2026.geojson",
+            [AirspaceCategory.D]: "/layers/ClassDAirspaces_09JUL2026.geojson",
+            [AirspaceCategory.E]: "/layers/ClassEAirspaces_09JUL2026.geojson",
+            [AirspaceCategory.R]: "/layers/ClassRAirspaces_09JUL2026.geojson",
+            [AirspaceCategory.Q]: "/layers/ClassQAirspaces_09JUL2026.geojson",
+            [AirspaceCategory.CTR]: "/layers/CTRAirspaces_09JUL2026.geojson"
         };
     }
     mapInit() {
