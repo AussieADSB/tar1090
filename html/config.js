@@ -226,6 +226,14 @@ BingMapsAPIKey = null;
 //
 MapboxAPIKey = null;
 
+// Provide a CARTO API key here to enable authenticated requests to CARTO basemap tiles.
+// You can obtain a key at https://carto.com/
+//
+// Be sure to quote your key:
+//   CartoAPIKey = "your key here";
+//
+CartoAPIKey = null;
+
 // This determines what is up, default is north (0 degrees)
 //mapOrientation = 0;
 

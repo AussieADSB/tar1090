@@ -92,7 +92,7 @@ function createBaseLayers() {
 
             basemaps.push(new ol.layer.Tile({
                 source: new ol.source.OSM({
-                    "url" : "https://{a-d}.basemaps.cartocdn.com/"+ cartoBasemap.id + "/{z}/{x}/{y}.png",
+                    "url" : "https://{a-d}.basemaps.cartocdn.com/"+ cartoBasemap.id + "/{z}/{x}/{y}.png?key=" + (CartoAPIKey || ''),
                     "attributions" : 'Powered by <a href="https://carto.com">CARTO.com</a>'
                         + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
                     attributionsCollapsible: false,

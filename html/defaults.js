@@ -239,6 +239,14 @@ let BingMapsAPIKey = null;
 //
 let MapboxAPIKey = null;
 
+// Provide a CARTO API key here to enable authenticated requests to CARTO basemap tiles.
+// You can obtain a key at https://carto.com/
+//
+// Be sure to quote your key:
+//   CartoAPIKey = "your key here";
+//
+let CartoAPIKey = null;
+
 let pf_data = ["chunks/pf.json"]
 
 let mapOrientation = 0; // This determines what is up, normally north (0 degrees)
